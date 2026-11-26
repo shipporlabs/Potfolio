@@ -3,6 +3,9 @@
 build/
 .flutter-plugins
 .flutter-plugins-dependencies
+# Website build
+dist/
+.firebase/
 # Secrets
 *.key
 *.pem
