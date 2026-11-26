@@ -4,6 +4,8 @@
  *  GET  /stocks?market=US|NG|EU|UK|KE   stock lists (+ live prices where available)
  *  GET  /history?symbol=&market=        daily closes (needs TWELVE_DATA_KEY)
  *  GET  /logo?u=<image url>              logo proxy with CORS, so Flutter web can draw it
+ *  POST /share               (auth)      save a public read-only pot snapshot, returns { id }
+ *  GET  /share/:id                       read a shared pot snapshot
  *  POST /guardian                        AI allocation via Workers AI, validated
  *  POST /checkout/sessions   (auth)      create a Light checkout session (signed)
  *  GET  /checkout/view/:secret           proxy Light public checkout view
@@ -87,6 +89,43 @@ async function proxyLogo(target: string, ctx: ExecutionContext): Promise<Respons
   return out;
 }
 
+/** Short, unguessable id for share links. */
+function shareId(): string {
+  const a = 'abcdefghijkmnopqrstuvwxyz23456789';
+  const b = crypto.getRandomValues(new Uint8Array(10));
+  return [...b].map((x) => a[x % a.length]).join('');
+}
+
+/** Keep only the fields the public page shows, with sane limits. Amounts only when the owner chose to show them. */
+function cleanShare(b: any) {
+  const str = (v: unknown, n: number) => (typeof v === 'string' ? v.slice(0, n) : undefined);
+  const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? Math.round(v * 100) / 100 : undefined);
+  const show = b?.showAmounts === true;
+  const allocations = (Array.isArray(b?.allocations) ? b.allocations : []).slice(0, 10).map((a: any) => ({
+    symbol: str(a?.symbol, 12) ?? '',
+    name: str(a?.name, 60) ?? '',
+    weight: Math.max(0, Math.min(100, Math.round(Number(a?.weight) || 0))),
+    logo: typeof a?.logo === 'string' && a.logo.startsWith('https://') ? a.logo.slice(0, 500) : undefined,
+  }));
+  const progress = num(b?.progress);
+  return {
+    name: str(b?.name, 60) ?? 'My pot',
+    goal: str(b?.goal, 30),
+    template: str(b?.template, 20),
+    frequency: b?.frequency === 'weekly' ? 'weekly' : b?.frequency === 'monthly' ? 'monthly' : undefined,
+    targetDate: str(b?.targetDate, 40),
+    createdAt: str(b?.createdAt, 40),
+    progress: progress === undefined ? undefined : Math.max(0, Math.min(1, progress)),
+    reached: b?.reached === true,
+    showAmounts: show,
+    target: show ? num(b?.target) : undefined,
+    invested: show ? num(b?.invested) : undefined,
+    perPeriod: show ? num(b?.perPeriod) : undefined,
+    value: show ? num(b?.value) : undefined,
+    allocations,
+  };
+}
+
 class HttpError extends Error {
   constructor(public status: number, message: string) {
     super(message);
@@ -107,6 +146,18 @@ export default {
         res = json(await getHistory(url.searchParams.get('symbol') ?? '', (url.searchParams.get('market') ?? 'US').toUpperCase(), env), 200, { 'cache-control': 'public, max-age=900' });
       } else if (req.method === 'GET' && p === '/logo') {
         res = await proxyLogo(url.searchParams.get('u') ?? '', ctx);
+      } else if (req.method === 'POST' && p === '/share') {
+        const uid = await requireUser(req, env);
+        const snap = cleanShare(await req.json());
+        const id = shareId();
+        await env.KV.put(`share:${id}`, JSON.stringify({ ...snap, owner: uid, sharedAt: new Date().toISOString() }), { expirationTtl: 60 * 60 * 24 * 180 });
+        res = json({ id });
+      } else if (req.method === 'GET' && p.startsWith('/share/')) {
+        const id = p.split('/').pop() ?? '';
+        const raw = /^[a-z0-9]{6,16}$/.test(id) ? await env.KV.get(`share:${id}`) : null;
+        if (!raw) throw new HttpError(404, 'This pot isn’t shared any more.');
+        const { owner, ...pub } = JSON.parse(raw);
+        res = json(pub, 200, { 'cache-control': 'public, max-age=60' });
       } else if (req.method === 'POST' && p === '/guardian') {
         res = json(await runGuardian(await req.json(), env));
       } else if (req.method === 'POST' && p === '/checkout/sessions') {
