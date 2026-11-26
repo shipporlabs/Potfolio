@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models.dart';
+import '../services/image_saver.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/share_card.dart';
@@ -33,28 +35,40 @@ class _ShareSheetState extends State<_ShareSheet> {
   bool _amounts = false;
   bool _busy = false;
   String? _link;
+  String? _note; // feedback shown inside the sheet (a snackbar would sit behind it)
 
   Pot get pot => widget.pot;
 
   String get _slug => pot.name.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '-').replaceAll(RegExp(r'^-|-$'), '');
 
+  String get _fileName => 'potfolio-${_slug.isEmpty ? 'pot' : _slug}';
+
+  /// Renders the preview card to PNG bytes at 3x for a sharp image.
+  Future<Uint8List> _capture() async {
+    await WidgetsBinding.instance.endOfFrame;
+    final boundary = _card.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    final image = await boundary.toImage(pixelRatio: 3);
+    final data = await image.toByteData(format: ui.ImageByteFormat.png);
+    image.dispose();
+    return data!.buffer.asUint8List();
+  }
+
   Future<void> _saveImage() async {
     setState(() => _busy = true);
     try {
-      final boundary = _card.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 3);
-      final data = await image.toByteData(format: ui.ImageByteFormat.png);
-      final bytes = data!.buffer.asUint8List();
-      await Share.shareXFiles(
-        [XFile.fromData(bytes, mimeType: 'image/png', name: 'potfolio-${_slug.isEmpty ? 'pot' : _slug}.png')],
-        text: 'My ${pot.name} pot on Potfolio',
-      );
+      final msg = await saveImage(await _capture(), _fileName);
+      _toast(msg);
       if (mounted) await context.read<AppState>().markShared();
-    } catch (_) {
-      _toast('Couldn’t create the image. Try again.');
+    } catch (e) {
+      _toast(_reason(e, 'Couldn’t save the image. Try again.'));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  String _reason(Object e, String fallback) {
+    final m = e.toString().replaceFirst('Exception: ', '');
+    return m.length < 120 && !m.contains('Error') ? m : fallback;
   }
 
   Map<String, dynamic> _snapshot() {
@@ -111,15 +125,22 @@ class _ShareSheetState extends State<_ShareSheet> {
     await launchUrl(Uri.parse('https://wa.me/?text=$text'), mode: LaunchMode.externalApplication);
   }
 
+  /// System share sheet with the image and the link together.
   Future<void> _more() async {
     final link = await _ensureLink();
     if (link == null) return;
-    await Share.share('I’m saving for “${pot.name}” with Potfolio. See my plan: $link', subject: pot.name);
+    final text = 'I’m saving for “${pot.name}” with Potfolio. See my plan: $link';
+    try {
+      final bytes = await _capture();
+      await Share.shareXFiles([XFile.fromData(bytes, mimeType: 'image/png', name: '$_fileName.png')], text: text, subject: pot.name);
+    } catch (_) {
+      await Share.share(text, subject: pot.name);
+    }
   }
 
   void _toast(String m) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(m)));
+    setState(() => _note = m);
   }
 
   @override
@@ -191,11 +212,23 @@ class _ShareSheetState extends State<_ShareSheet> {
               child: OutlinedButton.icon(
                 onPressed: _busy ? null : _more,
                 icon: const Icon(Icons.ios_share_rounded),
-                label: const Text('More'),
+                label: const Text('Share'),
                 style: OutlinedButton.styleFrom(backgroundColor: Colors.white),
               ),
             ),
           ]),
+          if (_note != null) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(color: PColors.navy, borderRadius: BorderRadius.circular(14)),
+              child: Row(children: [
+                const Icon(Icons.info_outline_rounded, size: 18, color: Colors.white),
+                const SizedBox(width: 8),
+                Expanded(child: Text(_note!, style: const TextStyle(color: Colors.white, fontSize: 13))),
+              ]),
+            ),
+          ],
           if (_link != null) ...[
             const SizedBox(height: 12),
             Container(
