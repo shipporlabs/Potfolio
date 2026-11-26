@@ -45,6 +45,7 @@
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "_redirects", "_headers", "**/*.apk"],
     "rewrites": [
+      { "source": "/p/**", "destination": "/p/index.html" },
       { "source": "/app/**", "destination": "/app/index.html" }
     ],
     "headers": [

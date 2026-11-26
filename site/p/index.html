@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Potfolio goal</title>
+<meta name="description" content="See this savings goal and its stock mix, built with the AI Guardian on Potfolio.">
+<meta property="og:title" content="A goal on Potfolio">
+<meta property="og:description" content="Pick a goal, get a plan. The AI Guardian builds a stock mix and tells you what to add each week.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0A1A3A">
+<link rel="icon" type="image/svg+xml" href="/assets/mark-tile.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#0052FF;--mid:#4D86FF;--sky:#99B9FF;--navy:#0A1A3A;--clay:#D9653B;--cream:#FBF6EE;--mist:#F3F6FC;--line:#E3E8F2;--slate:#5B6475;--gain:#0B8A5C}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--cream);color:var(--navy);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--blue)}
+.d{font-family:'Inter Tight',Inter,sans-serif;font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:0}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;max-width:1040px;width:100%;margin:0 auto}
+.lock{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy)}
+.lock img{width:32px;height:32px}
+.word{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:25px;letter-spacing:-.045em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 22px;border-radius:14px;font-weight:700;text-decoration:none;font-size:16px}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-dark{background:var(--navy);color:#fff;height:42px;font-size:14px;padding:0 16px}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:16px 20px 40px}
+.wrap{display:grid;grid-template-columns:minmax(0,400px) minmax(0,380px);gap:56px;align-items:center}
+.card{background:var(--navy);color:#fff;border-radius:28px;padding:24px;box-shadow:0 30px 60px rgba(10,26,58,.22);animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+.top{display:flex;align-items:center;justify-content:space-between}
+.pill{font-size:12px;font-weight:600;color:#C9D6F2;background:rgba(255,255,255,.1);padding:5px 10px;border-radius:99px}
+.title{display:flex;align-items:center;gap:12px;margin-top:18px}
+.title h1{font-size:28px;color:#fff}
+.sub{color:#C9D6F2;font-size:14px;margin-top:6px}
+.art{width:88px;height:auto;flex:none;animation:float 2.6s ease-in-out infinite alternate}
+@keyframes float{to{transform:translateY(-5px)}}
+.pct{display:flex;align-items:baseline;gap:10px;margin-top:18px}
+.pct b{font-size:40px}
+.bar{height:12px;background:#233457;border-radius:12px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;width:0;border-radius:12px;background:linear-gradient(90deg,#4D86FF,#99B9FF);transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.mix{background:#fff;color:var(--navy);border-radius:18px;padding:16px;margin-top:20px}
+.mix h3{margin:0 0 10px;font-size:12px;color:var(--slate);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.alloc{display:flex;gap:3px;height:8px;margin-bottom:8px}
+.alloc span{border-radius:8px}
+.row{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-of-type{border-top:0}
+.lg{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;background:#fff;overflow:hidden;flex:none}
+.lg img{width:62%;height:62%;object-fit:contain}
+.row .n{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .w{font-weight:800}
+.foot{display:flex;justify-content:space-between;margin-top:16px;font-size:11px;color:rgba(255,255,255,.7)}
+.foot b{color:#fff}
+.pitch h2{font-size:42px}
+.pitch p{color:var(--slate);font-size:17px;line-height:1.6}
+.pitch ul{list-style:none;padding:0;margin:18px 0 26px;display:grid;gap:10px}
+.pitch li{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.pitch li::before{content:'';flex:none;width:20px;height:20px;border-radius:50%;background:var(--gain) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat;margin-top:1px}
+.small{font-size:12px;color:var(--slate);margin-top:14px}
+.err{text-align:center;max-width:420px}
+.err img{width:180px}
+.skel{width:380px;height:520px;border-radius:28px;background:linear-gradient(100deg,#eef1f7 40%,#f7f8fb 50%,#eef1f7 60%) 0 0/200% 100%;animation:sh 1.2s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);gap:28px}.pitch h2{font-size:32px}.skel{width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <a class="lock" href="/"><img src="/assets/mark.svg" alt=""><span class="word">potfolio</span></a>
+  <a class="btn btn-dark" href="/app/">Get started</a>
+</header>
+<main id="main"><div class="skel" aria-label="Loading"></div></main>
+<script>
+(function(){
+  var API='__WORKER_URL__';
+  var C=['#0052FF','#4D86FF','#99B9FF','#0A1A3A','#B8CEFF','#2E3F66'];
+  var GOALS=['rent','emergency','phone','school','laptop','japa','detty','custom'];
+  var main=document.getElementById('main');
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+  var usd=function(v){return '$'+Number(v).toLocaleString('en-US',{minimumFractionDigits:v%1?2:0,maximumFractionDigits:2})};
+  var month=function(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString('en-GB',{month:'short',year:'numeric'})};
+  var id=(location.pathname.split('/p/')[1]||'').split(/[/?#]/)[0];
+  function fail(msg){
+    main.innerHTML='<div class="err"><img src="/assets/goals/goal_custom.svg" alt=""><h1 class="d" style="font-size:30px;margin-top:10px">'+esc(msg)+'</h1><p style="color:var(--slate)">Start your own goal and the Guardian will build a plan for it.</p><a class="btn btn-primary" href="/app/">Get started</a></div>';
+  }
+  if(!/^[a-z0-9]{6,16}$/.test(id)) return fail('This link doesn’t look right.');
+  fetch(API.replace(/\/$/,'')+'/share/'+id).then(function(r){return r.ok?r.json():Promise.reject(r.status)}).then(function(p){
+    document.title=(p.name||'A goal')+' · Potfolio';
+    var art=GOALS.indexOf(p.template)>=0?'/assets/goals/goal_'+p.template+'.svg':'/assets/goals/goal_custom.svg';
+    var hasPlan=typeof p.progress==='number';
+    var pct=hasPlan?Math.round(p.progress*100):null;
+    var sub=hasPlan?(p.showAmounts&&p.target?usd(p.target)+' by '+month(p.targetDate):'Goal for '+month(p.targetDate)):(p.showAmounts&&p.value?usd(p.value)+' today':(p.goal||''));
+    var detail=!hasPlan?'':p.reached?'Target reached':(p.showAmounts&&p.invested!=null?usd(p.invested)+' saved'+(p.perPeriod?' · '+usd(p.perPeriod)+' a '+(p.frequency==='weekly'?'week':'month'):''):'of the way there'+(p.frequency?' · saving '+p.frequency:''));
+    var al=(p.allocations||[]).slice().sort(function(a,b){return b.weight-a.weight});
+    var html='<div class="wrap"><div class="card">'+
+      '<div class="top"><span class="word" style="color:#fff;font-size:20px">potfolio</span><span class="pill">'+esc(p.goal||'Pot')+'</span></div>'+
+      '<div class="title"><div style="flex:1"><h1 class="d">'+esc(p.name)+'</h1><div class="sub">'+esc(sub)+'</div></div><img class="art" src="'+art+'" alt=""></div>'+
+      (hasPlan?'<div class="pct"><b class="d" id="pct">0%</b><span style="color:#C9D6F2;font-size:14px">'+esc(detail)+'</span></div><div class="bar"><i id="bar"></i></div>':'')+
+      '<div class="mix"><h3>The mix</h3><div class="alloc">'+al.map(function(a,i){return '<span style="flex:'+Math.max(1,a.weight)+';background:'+C[i%C.length]+'"></span>'}).join('')+'</div>'+
+      al.slice(0,5).map(function(a){return '<div class="row"><span class="lg">'+(a.logo?'<img src="'+esc(a.logo)+'" alt="" onerror="this.parentNode.textContent=\''+esc((a.name||'?')[0])+'\'">':esc((a.name||'?')[0]))+'</span><span class="n">'+esc(a.name)+'</span><span class="w">'+a.weight+'%</span></div>'}).join('')+'</div>'+
+      '<div class="foot"><span>Built with the AI Guardian on Base</span><b>'+esc(location.host)+'</b></div></div>'+
+      '<div class="pitch"><h2 class="d">Your goal, with a plan.</h2><p>Pick what you’re saving for. The AI Guardian builds a mix of US stocks on Base, explains every pick, and tells you what to add each week to hit your target.</p>'+
+      '<ul><li>Templates for rent, school fees, a new phone or japa</li><li>“Add $15 this week” reminders that keep you on track</li><li>Honest about risk: your plan counts what you add, market gains are extra</li></ul>'+
+      '<a class="btn btn-primary" href="/app/">Start your own goal</a><p class="small">Educational, not financial advice. Shared amounts are optional and set by the owner.</p></div></div>';
+    main.innerHTML=html;
+    if(hasPlan){requestAnimationFrame(function(){setTimeout(function(){
+      document.getElementById('bar').style.width=pct+'%';
+      var el=document.getElementById('pct'),t0=null;
+      (function step(t){t0=t0||t;var k=Math.min(1,(t-t0)/1300);el.textContent=Math.round(pct*(1-Math.pow(1-k,3)))+'%';if(k<1)requestAnimationFrame(step)})(performance.now());
+    },120)})}
+  }).catch(function(code){fail(code===404?'This pot isn’t shared any more.':'Couldn’t load this pot.')});
+})();
+</script>
+</body>
+</html>
