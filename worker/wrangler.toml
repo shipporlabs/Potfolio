@@ -12,7 +12,7 @@ binding = "KV"
 id = "9d862780cc9d46b4a875df83cd8b197f"
 
 [vars]
-FIREBASE_PROJECT_ID = "REPLACE_WITH_FIREBASE_PROJECT_ID"
+FIREBASE_PROJECT_ID = "usepotfolio"
 LIGHT_BASE_URL = "https://sandbox.sendlight.xyz"
 ALLOWED_ORIGINS = "*"
 
