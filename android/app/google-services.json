@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "610113642000",
+    "project_id": "usepotfolio",
+    "storage_bucket": "usepotfolio.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610113642000:android:2480a53fb993dacaa2b495",
+        "android_client_info": {
+          "package_name": "com.example.potfolio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfp3Uj74mm1W8x4fFxkylmzJRnfclXe3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
