@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../config.dart';
 import '../models.dart';
+import '../services/stocks_service.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/brand.dart';
@@ -40,7 +41,23 @@ class StockDetailScreen extends StatelessWidget {
           ),
         ]),
         const SizedBox(height: 20),
-        Text(stock.price != null ? money(stock.price!, stock.currency) : 'Price unavailable', style: display(36)),
+        FutureBuilder<HistoryResult>(
+          future: stock.price == null ? s.stocks.history(stock) : null,
+          builder: (context, snap) {
+            // Not every stock has a live quote; fall back to the last daily close.
+            final last = (snap.data?.points.isNotEmpty ?? false) ? snap.data!.points.last : null;
+            final text = stock.price != null
+                ? money(stock.price!, stock.currency)
+                : last != null
+                    ? money(last, stock.currency)
+                    : (snap.connectionState == ConnectionState.waiting ? '…' : 'Price unavailable');
+            return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(text, style: display(36)),
+              if (stock.price == null && last != null)
+                const Text('Last close', style: TextStyle(color: PColors.slate, fontSize: 13)),
+            ]);
+          },
+        ),
         const SizedBox(height: 4),
         Row(children: [
           if (stock.changePct != null)
@@ -51,16 +68,16 @@ class StockDetailScreen extends StatelessWidget {
           ],
         ]),
         const SizedBox(height: 16),
-        FutureBuilder<List<double>>(
+        FutureBuilder<HistoryResult>(
           future: s.stocks.history(stock),
           builder: (context, snap) {
-            final pts = snap.data ?? [];
+            final pts = snap.data?.points ?? const <double>[];
             if (pts.length < 2) {
               return Container(
                 height: 160,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: PColors.line)),
-                child: Text(snap.connectionState == ConnectionState.waiting ? 'Loading chart…' : 'Chart needs a market data key on the server.',
+                child: Text(snap.connectionState == ConnectionState.waiting ? 'Loading chart…' : (snap.data?.message ?? 'No chart for this stock yet.'),
                     style: const TextStyle(color: PColors.slate)),
               );
             }
@@ -134,8 +151,8 @@ class _Row extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(children: [
           Text(k, style: const TextStyle(color: PColors.slate)),
-          const Spacer(),
-          Flexible(child: Text(v, textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w600))),
+          const SizedBox(width: 16),
+          Expanded(child: Text(v, textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w600))),
         ]),
       );
 }

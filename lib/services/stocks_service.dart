@@ -74,10 +74,13 @@ class StocksService {
     }
   }
 
+  /// Coinbase tokenized tickers carry a lowercase suffix (AAPLc, older AAPLx).
   String _norm(String t) {
-    var x = t.toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]'), '');
-    if (x.length > 1 && x.endsWith('X')) x = x.substring(0, x.length - 1);
-    return x;
+    var x = t.trim();
+    if (x.length > 1 && RegExp(r'[a-z]$').hasMatch(x) && RegExp(r'[A-Z]').hasMatch(x.substring(0, x.length - 1))) {
+      x = x.substring(0, x.length - 1);
+    }
+    return x.toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]'), '');
   }
 
   Map<String, double> priceMap() {
@@ -90,13 +93,33 @@ class StocksService {
     return m;
   }
 
-  Future<List<double>> history(Stock s, {String range = '1M'}) async {
-    if (!AppConfig.hasWorker) return const [];
+  final Map<String, Future<HistoryResult>> _history = {};
+
+  /// Daily closes for the chart. Cached per stock for this session.
+  Future<HistoryResult> history(Stock s, {String range = '1M'}) =>
+      _history.putIfAbsent('${s.market.code}:${s.symbol}:$range', () => _loadHistory(s, range));
+
+  Future<HistoryResult> _loadHistory(Stock s, String range) async {
+    if (!AppConfig.hasWorker) return const HistoryResult([], 'no_worker');
     try {
       final j = await _api.get('/history', query: {'symbol': s.symbol, 'market': s.market.code, 'range': range});
-      return ((j['points'] as List?) ?? []).map((e) => (e as num).toDouble()).toList();
+      final pts = ((j['points'] as List?) ?? []).map((e) => (e as num).toDouble()).toList();
+      return HistoryResult(pts, j['reason'] as String?);
     } catch (_) {
-      return const [];
+      _history.remove('${s.market.code}:${s.symbol}:$range');
+      return const HistoryResult([], 'error');
     }
   }
+}
+
+class HistoryResult {
+  final List<double> points;
+  final String? reason; // no_key, no_data, rate_limited, no_worker, error
+  const HistoryResult(this.points, this.reason);
+
+  String get message => switch (reason) {
+        'no_key' || 'no_worker' => 'Charts turn on once the server has a market data key.',
+        'rate_limited' => 'Chart is busy right now. Try again in a minute.',
+        _ => 'No chart for this stock yet.',
+      };
 }

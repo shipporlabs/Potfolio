@@ -3,6 +3,7 @@
  *
  *  GET  /stocks?market=US|NG|EU|UK|KE   stock lists (+ live prices where available)
  *  GET  /history?symbol=&market=        daily closes (needs TWELVE_DATA_KEY)
+ *  GET  /logo?u=<image url>              logo proxy with CORS, so Flutter web can draw it
  *  POST /guardian                        AI allocation via Workers AI, validated
  *  POST /checkout/sessions   (auth)      create a Light checkout session (signed)
  *  GET  /checkout/view/:secret           proxy Light public checkout view
@@ -53,6 +54,39 @@ async function requireUser(req: Request, env: Env): Promise<string> {
   }
 }
 
+const LOGO_HOSTS = ['api.coinbase.com', 'www.google.com', 'icons.duckduckgo.com'];
+
+/** Fetches a company logo server-side and returns it with CORS headers, cached for a week.
+ *  Only a few known image hosts are allowed, so this can't be used as an open proxy. */
+async function proxyLogo(target: string, ctx: ExecutionContext): Promise<Response> {
+  let u: URL;
+  try {
+    u = new URL(target);
+  } catch {
+    throw new HttpError(400, 'Bad logo url');
+  }
+  if (u.protocol !== 'https:' || !LOGO_HOSTS.includes(u.hostname)) throw new HttpError(400, 'Logo host not allowed');
+  const cache = caches.default;
+  const key = new Request(`https://cache.potfolio/logo/${encodeURIComponent(u.toString())}`);
+  const hit = await cache.match(key);
+  if (hit) return new Response(hit.body, hit);
+  let r = await fetch(u.toString(), { headers: { accept: 'image/*,application/json' }, cf: { cacheTtl: 604800 } } as RequestInit);
+  let type = r.headers.get('content-type') ?? '';
+  if (r.ok && type.includes('json')) {
+    // Some image endpoints answer with JSON that points at the real file.
+    const j: any = await r.json().catch(() => ({}));
+    const next = j?.url ?? j?.image_url ?? j?.data?.url ?? j?.data?.image_url;
+    if (typeof next !== 'string' || !next.startsWith('https://')) throw new HttpError(404, 'Logo not found');
+    r = await fetch(next, { headers: { accept: 'image/*' }, cf: { cacheTtl: 604800 } } as RequestInit);
+    type = r.headers.get('content-type') ?? '';
+  }
+  if (!r.ok || !type.startsWith('image/')) throw new HttpError(404, 'Logo not found');
+  const buf = await r.arrayBuffer();
+  const out = new Response(buf, { headers: { 'content-type': type, 'cache-control': 'public, max-age=604800' } });
+  ctx.waitUntil(cache.put(key, out.clone()));
+  return out;
+}
+
 class HttpError extends Error {
   constructor(public status: number, message: string) {
     super(message);
@@ -70,7 +104,9 @@ export default {
       if (req.method === 'GET' && p === '/stocks') {
         res = json({ stocks: await getStocks((url.searchParams.get('market') ?? 'US').toUpperCase(), env, ctx) });
       } else if (req.method === 'GET' && p === '/history') {
-        res = json({ points: await getHistory(url.searchParams.get('symbol') ?? '', (url.searchParams.get('market') ?? 'US').toUpperCase(), env) });
+        res = json(await getHistory(url.searchParams.get('symbol') ?? '', (url.searchParams.get('market') ?? 'US').toUpperCase(), env), 200, { 'cache-control': 'public, max-age=900' });
+      } else if (req.method === 'GET' && p === '/logo') {
+        res = await proxyLogo(url.searchParams.get('u') ?? '', ctx);
       } else if (req.method === 'POST' && p === '/guardian') {
         res = json(await runGuardian(await req.json(), env));
       } else if (req.method === 'POST' && p === '/checkout/sessions') {

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'config.dart';
+
 enum Market { us, ng, eu, uk, ke }
 
 extension MarketX on Market {
@@ -65,10 +67,15 @@ class Stock {
   /// Investable onchain today: only Coinbase tokenized US stocks on Base.
   bool get investable => contract != null && contract!.isNotEmpty;
 
+  /// Logo URL. Goes through the Worker's /logo proxy when one is configured:
+  /// the source hosts don't send CORS headers (so Flutter web can't draw them)
+  /// and can be slow or blocked on some networks.
   String get logo {
-    if (logoUrl != null && logoUrl!.isNotEmpty) return logoUrl!;
-    if (domain != null) return 'https://www.google.com/s2/favicons?domain=$domain&sz=128';
-    return '';
+    final raw = (logoUrl != null && logoUrl!.isNotEmpty)
+        ? logoUrl!
+        : (domain != null ? 'https://www.google.com/s2/favicons?domain=$domain&sz=128' : '');
+    if (raw.isEmpty || !AppConfig.hasWorker || raw.startsWith(AppConfig.workerUrl)) return raw;
+    return '${AppConfig.workerUrl}/logo?u=${Uri.encodeComponent(raw)}';
   }
 
   String get currency => market.currency;
