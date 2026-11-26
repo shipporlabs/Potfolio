@@ -33,7 +33,17 @@ class StockLogo extends StatelessWidget {
       child: ClipOval(
         child: url.isEmpty
             ? letter
-            : Image.network(url, fit: BoxFit.contain, errorBuilder: (_, __, ___) => letter, semanticLabel: '$fallback logo'),
+            : Image.network(
+                url,
+                fit: BoxFit.contain,
+                // Decode at display size, not the source size.
+                cacheWidth: (size * 3).round(),
+                gaplessPlayback: true,
+                // Show the letter until the logo arrives.
+                frameBuilder: (_, child, frame, sync) => sync || frame != null ? child : letter,
+                errorBuilder: (_, __, ___) => letter,
+                semanticLabel: '$fallback logo',
+              ),
       ),
     );
   }
@@ -93,7 +103,7 @@ class StockTile extends StatelessWidget {
                     style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, fontFeatures: [FontFeature.tabularFigures()])),
                 const SizedBox(height: 2),
                 if (ch != null)
-                  Text(pct(ch), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: ch >= 0 ? PColors.gain : PColors.loss))
+                  Text(pct(ch), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: ch >= 0 ? PColors.gain : PColors.loss)),
                 else
                   Text(stock.investable ? 'On Base' : 'Watch', style: const TextStyle(fontSize: 12, color: PColors.slate)),
               ]),
