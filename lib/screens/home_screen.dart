@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ]),
             const SizedBox(height: 18),
-            _ValueCard(value: value, invested: invested, change: change, funded: s.funded, usdc: s.usdc),
+            _ValueCard(value: value, invested: invested, change: change, balance: s.usdc == null && s.funded == null ? null : s.balance, available: s.available),
             const SizedBox(height: 16),
             Row(children: [
               _Action(icon: Icons.add_rounded, label: 'Add money', onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddMoneyScreen()))),
@@ -127,8 +127,9 @@ class HomeScreen extends StatelessWidget {
 
 class _ValueCard extends StatelessWidget {
   final double value, invested, change;
-  final double? funded, usdc;
-  const _ValueCard({required this.value, required this.invested, required this.change, this.funded, this.usdc});
+  final double? balance;
+  final double available;
+  const _ValueCard({required this.value, required this.invested, required this.change, this.balance, required this.available});
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(22),
@@ -146,10 +147,10 @@ class _ValueCard extends StatelessWidget {
             ]),
             const SizedBox(height: 18),
             Row(children: [
-              Expanded(child: _Mini('Wallet USDC', usdc == null ? '—' : money(usdc!))),
+              Expanded(child: _Mini('Your balance', balance == null ? '—' : money(balance!))),
               Container(width: 1, height: 32, color: Colors.white.withValues(alpha: 0.12)),
               const SizedBox(width: 16),
-              Expanded(child: _Mini('Added via checkout', funded == null ? '—' : money(funded!))),
+              Expanded(child: _Mini('Free to save', balance == null ? '—' : money(available))),
             ]),
           ]),
         ]),
@@ -284,7 +285,10 @@ class _ThingsToDo extends StatelessWidget {
       final plan = p.plan(now);
       if (plan == null || plan.reached || plan.overdue) continue;
       final daysToDue = plan.nextDue.difference(now).inDays;
-      if (plan.delta < -0.5 || daysToDue <= 3) {
+      if (p.invested <= 0) {
+        items.add(_Todo(Icons.savings_rounded, 'Fund ${p.name}', 'Your plan starts with the first deposit',
+            done: false, urgent: true, onTap: () => showAddDeposit(context, p)));
+      } else if (plan.delta < -0.5 || daysToDue <= 3) {
         items.add(_Todo(
           Icons.savings_rounded,
           'Add ${money(plan.perPeriod)} to ${p.name}',
@@ -301,7 +305,7 @@ class _ThingsToDo extends StatelessWidget {
       _Todo(Icons.account_balance_wallet_rounded, 'Get your Base wallet', 'Free, takes a second', done: s.address != null, onTap: () => Shell.goTo(context, 3)),
       _Todo(Icons.flag_rounded, 'Start your first goal', 'Rent, phone, japa or your own', done: s.myPots.isNotEmpty,
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreatePotScreen()))),
-      _Todo(Icons.add_card_rounded, 'Add money', 'Card or bank, arrives as USDC', done: (s.funded ?? 0) > 0,
+      _Todo(Icons.add_card_rounded, 'Add money', 'Card or bank, arrives as USDC', done: s.balance > 0,
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddMoneyScreen()))),
       if (s.myPots.isNotEmpty)
         _Todo(Icons.ios_share_rounded, 'Share a pot', 'Friends keep you on track', done: s.sharedOnce, onTap: () => showSharePot(context, s.myPots.first)),

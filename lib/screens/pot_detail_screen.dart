@@ -67,7 +67,12 @@ class PotDetailScreen extends StatelessWidget {
                   const Icon(Icons.check_circle_rounded, color: PColors.gain),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Text(plan != null ? 'Pot started. Add ${money(plan.perPeriod)} every ${p.frequency.per} to stay on track.' : 'Pot saved. You can track it here any time.',
+                    child: Text(
+                        plan == null
+                            ? 'Pot saved. You can track it here any time.'
+                            : p.invested <= 0
+                                ? 'Goal created. Fund it when you’re ready, then add ${money(plan.perPeriod)} every ${p.frequency.per}.'
+                                : 'Pot started. Add ${money(plan.perPeriod)} every ${p.frequency.per} to stay on track.',
                         style: const TextStyle(fontWeight: FontWeight.w600)),
                   ),
                 ]),
@@ -283,8 +288,48 @@ class _Stat extends StatelessWidget {
 
 /// Bottom sheet to record a deposit into a pot.
 Future<void> showAddDeposit(BuildContext context, Pot pot) async {
+  final s = context.read<AppState>();
+  try {
+    await s.refreshBalances();
+  } catch (_) {}
+  if (!context.mounted) return;
+  final free = s.available;
   final plan = pot.plan();
-  final suggested = plan?.perPeriod ?? 0;
+  final planned = plan?.perPeriod ?? 0;
+  final suggested = free >= 1 ? (planned < free ? planned : free.floorToDouble()) : 0.0;
+  if (free < 1) {
+    // Nothing free to move into the pot: send them to add money first.
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (c) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('Add money first', style: display(22, weight: FontWeight.w700)),
+          const SizedBox(height: 6),
+          Text(
+            planned > 0
+                ? 'Your plan needs ${money(planned)} this ${pot.frequency.per}, but you have nothing free to save. Add money by card or bank, then move it into ${pot.name}.'
+                : 'You have nothing free to save. Add money by card or bank, then move it into ${pot.name}.',
+            style: const TextStyle(color: PColors.slate, height: 1.4),
+          ),
+          const SizedBox(height: 18),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () {
+                Navigator.pop(c);
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddMoneyScreen()));
+              },
+              icon: const Icon(Icons.add_card_rounded),
+              label: const Text('Add money'),
+            ),
+          ),
+        ]),
+      ),
+    );
+    return;
+  }
   final ctl = TextEditingController(text: suggested > 0 ? suggested.toStringAsFixed(suggested == suggested.roundToDouble() ? 0 : 2) : '');
   final added = await showModalBottomSheet<double>(
     context: context,
@@ -296,7 +341,7 @@ Future<void> showAddDeposit(BuildContext context, Pot pot) async {
         Text('Add to ${pot.name}', style: display(22, weight: FontWeight.w700)),
         const SizedBox(height: 6),
         Text(
-          plan == null ? 'Record money you put into this pot.' : 'Your plan says ${money(suggested)} this ${pot.frequency.per}. Add more to get ahead.',
+          '${money(free)} free to save.${plan == null ? '' : ' Your plan says ${money(planned)} this ${pot.frequency.per}.'}',
           style: const TextStyle(color: PColors.slate),
         ),
         const SizedBox(height: 16),
@@ -310,7 +355,7 @@ Future<void> showAddDeposit(BuildContext context, Pot pot) async {
         ),
         const SizedBox(height: 10),
         Wrap(spacing: 8, children: [
-          for (final v in {if (suggested > 0) suggested, 10.0, 25.0, 50.0, 100.0})
+          for (final v in {if (suggested > 0) suggested, 10.0, 25.0, 50.0, 100.0}.where((v) => v <= free))
             ActionChip(label: Text(money(v).replaceAll('.00', '')), onPressed: () => ctl.text = v.toStringAsFixed(v == v.roundToDouble() ? 0 : 2)),
         ]),
         const SizedBox(height: 16),
@@ -319,9 +364,13 @@ Future<void> showAddDeposit(BuildContext context, Pot pot) async {
           child: FilledButton(
             onPressed: () {
               final v = double.tryParse(ctl.text) ?? 0;
+              if (v > free + 0.005) {
+                ScaffoldMessenger.of(c).showSnackBar(SnackBar(content: Text('You only have ${money(free)} free to save.')));
+                return;
+              }
               if (v >= 1) Navigator.pop(c, v);
             },
-            child: const Text('Record deposit'),
+            child: const Text('Move to pot'),
           ),
         ),
         const SizedBox(height: 6),
@@ -331,7 +380,7 @@ Future<void> showAddDeposit(BuildContext context, Pot pot) async {
               Navigator.pop(c);
               Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddMoneyScreen()));
             },
-            child: const Text('Need funds? Add money with card or bank'),
+            child: const Text('Need more? Add money with card or bank'),
           ),
         ),
       ]),
@@ -339,10 +388,12 @@ Future<void> showAddDeposit(BuildContext context, Pot pot) async {
   );
   if (added == null || !context.mounted) return;
   try {
-    await context.read<AppState>().addContribution(pot, added);
+    await s.addContribution(pot, added);
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${money(added)} added to ${pot.name}.')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${money(added)} moved into ${pot.name}.')));
     }
+  } on NotEnoughMoney {
+    if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Not enough money free to save. Add money first.')));
   } catch (_) {
     if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Couldn’t save the deposit. Check your connection.')));
   }
