@@ -1,0 +1,22 @@
+name = "potfolio-api"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+
+# Free Workers AI tier powers the Guardian.
+[ai]
+binding = "AI"
+
+# Create with: npx wrangler kv namespace create KV   (then paste the id below)
+[[kv_namespaces]]
+binding = "KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+FIREBASE_PROJECT_ID = "REPLACE_WITH_FIREBASE_PROJECT_ID"
+LIGHT_BASE_URL = "https://sandbox.sendlight.xyz"
+ALLOWED_ORIGINS = "*"
+
+# Secrets (never commit these):
+#   npx wrangler secret put LIGHT_API_KEY       # lk_test_...
+#   npx wrangler secret put LIGHT_SIGNING_KEY   # contents of light-signing.key (PEM)
+#   npx wrangler secret put TWELVE_DATA_KEY     # optional, for non-US prices and charts

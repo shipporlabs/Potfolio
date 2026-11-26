@@ -1,0 +1,110 @@
+[
+ {
+  "symbol": "ASML",
+  "name": "ASML",
+  "exchange": "Euronext Amsterdam",
+  "sector": "tech",
+  "domain": "asml.com",
+  "td": "ASML",
+  "tdExchange": "Euronext"
+ },
+ {
+  "symbol": "MC",
+  "name": "LVMH",
+  "exchange": "Euronext Paris",
+  "sector": "consumer",
+  "domain": "lvmh.com",
+  "td": "MC",
+  "tdExchange": "Euronext"
+ },
+ {
+  "symbol": "SAP",
+  "name": "SAP",
+  "exchange": "Xetra",
+  "sector": "tech",
+  "domain": "sap.com",
+  "td": "SAP",
+  "tdExchange": "XETR"
+ },
+ {
+  "symbol": "SIE",
+  "name": "Siemens",
+  "exchange": "Xetra",
+  "sector": "industrial",
+  "domain": "siemens.com",
+  "td": "SIE",
+  "tdExchange": "XETR"
+ },
+ {
+  "symbol": "TTE",
+  "name": "TotalEnergies",
+  "exchange": "Euronext Paris",
+  "sector": "energy",
+  "domain": "totalenergies.com",
+  "td": "TTE",
+  "tdExchange": "Euronext"
+ },
+ {
+  "symbol": "OR",
+  "name": "L’Oréal",
+  "exchange": "Euronext Paris",
+  "sector": "consumer",
+  "domain": "loreal.com",
+  "td": "OR",
+  "tdExchange": "Euronext"
+ },
+ {
+  "symbol": "AIR",
+  "name": "Airbus",
+  "exchange": "Euronext Paris",
+  "sector": "industrial",
+  "domain": "airbus.com",
+  "td": "AIR",
+  "tdExchange": "Euronext"
+ },
+ {
+  "symbol": "NOVO-B",
+  "name": "Novo Nordisk",
+  "exchange": "Copenhagen",
+  "sector": "health",
+  "domain": "novonordisk.com",
+  "td": "NOVO B",
+  "tdExchange": "OMXC"
+ },
+ {
+  "symbol": "NESN",
+  "name": "Nestlé",
+  "exchange": "SIX Swiss",
+  "sector": "consumer",
+  "domain": "nestle.com",
+  "td": "NESN",
+  "tdExchange": "SIX"
+ },
+ {
+  "symbol": "ADS",
+  "name": "Adidas",
+  "exchange": "Xetra",
+  "sector": "consumer",
+  "domain": "adidas.com",
+  "td": "ADS",
+  "tdExchange": "XETR"
+ },
+ {
+  "symbol": "BMW",
+  "name": "BMW",
+  "exchange": "Xetra",
+  "sector": "consumer",
+  "domain": "bmw.com",
+  "td": "BMW",
+  "tdExchange": "XETR"
+ },
+ {
+  "symbol": "ALV",
+  "name": "Allianz",
+  "exchange": "Xetra",
+  "sector": "finance",
+  "domain": "allianz.com",
+  "td": "ALV",
+  "tdExchange": "XETR"
+ }
+]

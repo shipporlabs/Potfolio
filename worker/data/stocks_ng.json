@@ -1,0 +1,86 @@
+[
+ {
+  "symbol": "DANGCEM",
+  "name": "Dangote Cement",
+  "exchange": "NGX",
+  "sector": "industrial",
+  "domain": "dangotecement.com"
+ },
+ {
+  "symbol": "MTNN",
+  "name": "MTN Nigeria",
+  "exchange": "NGX",
+  "sector": "tech",
+  "domain": "mtn.ng"
+ },
+ {
+  "symbol": "AIRTELAFRI",
+  "name": "Airtel Africa",
+  "exchange": "NGX",
+  "sector": "tech",
+  "domain": "airtel.africa"
+ },
+ {
+  "symbol": "BUAFOODS",
+  "name": "BUA Foods",
+  "exchange": "NGX",
+  "sector": "consumer",
+  "domain": "buafoods.com"
+ },
+ {
+  "symbol": "ZENITHBANK",
+  "name": "Zenith Bank",
+  "exchange": "NGX",
+  "sector": "finance",
+  "domain": "zenithbank.com"
+ },
+ {
+  "symbol": "GTCO",
+  "name": "GTCO",
+  "exchange": "NGX",
+  "sector": "finance",
+  "domain": "gtcoplc.com"
+ },
+ {
+  "symbol": "ACCESSCORP",
+  "name": "Access Holdings",
+  "exchange": "NGX",
+  "sector": "finance",
+  "domain": "theaccesscorporation.com"
+ },
+ {
+  "symbol": "UBA",
+  "name": "UBA",
+  "exchange": "NGX",
+  "sector": "finance",
+  "domain": "ubagroup.com"
+ },
+ {
+  "symbol": "FIRSTHOLDCO",
+  "name": "First HoldCo",
+  "exchange": "NGX",
+  "sector": "finance",
+  "domain": "firstbanknigeria.com"
+ },
+ {
+  "symbol": "NESTLE",
+  "name": "Nestlé Nigeria",
+  "exchange": "NGX",
+  "sector": "consumer",
+  "domain": "nestle-cwa.com"
+ },
+ {
+  "symbol": "SEPLAT",
+  "name": "Seplat Energy",
+  "exchange": "NGX",
+  "sector": "energy",
+  "domain": "seplatenergy.com"
+ },
+ {
+  "symbol": "STANBIC",
+  "name": "Stanbic IBTC",
+  "exchange": "NGX",
+  "sector": "finance",
+  "domain": "stanbicibtc.com"
+ }
+]

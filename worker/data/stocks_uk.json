@@ -1,0 +1,92 @@
+[
+ {
+  "symbol": "SHEL",
+  "name": "Shell",
+  "exchange": "LSE",
+  "sector": "energy",
+  "domain": "shell.com",
+  "td": "SHEL",
+  "tdExchange": "LSE"
+ },
+ {
+  "symbol": "AZN",
+  "name": "AstraZeneca",
+  "exchange": "LSE",
+  "sector": "health",
+  "domain": "astrazeneca.com",
+  "td": "AZN",
+  "tdExchange": "LSE"
+ },
+ {
+  "symbol": "HSBA",
+  "name": "HSBC",
+  "exchange": "LSE",
+  "sector": "finance",
+  "domain": "hsbc.com",
+  "td": "HSBA",
+  "tdExchange": "LSE"
+ },
+ {
+  "symbol": "ULVR",
+  "name": "Unilever",
+  "exchange": "LSE",
+  "sector": "consumer",
+  "domain": "unilever.com",
+  "td": "ULVR",
+  "tdExchange": "LSE"
+ },
+ {
+  "symbol": "BP",
+  "name": "BP",
+  "exchange": "LSE",
+  "sector": "energy",
+  "domain": "bp.com",
+  "td": "BP",
+  "tdExchange": "LSE"
+ },
+ {
+  "symbol": "DGE",
+  "name": "Diageo",
+  "exchange": "LSE",
+  "sector": "consumer",
+  "domain": "diageo.com",
+  "td": "DGE",
+  "tdExchange": "LSE"
+ },
+ {
+  "symbol": "BARC",
+  "name": "Barclays",
+  "exchange": "LSE",
+  "sector": "finance",
+  "domain": "barclays.com",
+  "td": "BARC",
+  "tdExchange": "LSE"
+ },
+ {
+  "symbol": "RR",
+  "name": "Rolls-Royce",
+  "exchange": "LSE",
+  "sector": "industrial",
+  "domain": "rolls-royce.com",
+  "td": "RR",
+  "tdExchange": "LSE"
+ },
+ {
+  "symbol": "GSK",
+  "name": "GSK",
+  "exchange": "LSE",
+  "sector": "health",
+  "domain": "gsk.com",
+  "td": "GSK",
+  "tdExchange": "LSE"
+ },
+ {
+  "symbol": "VOD",
+  "name": "Vodafone",
+  "exchange": "LSE",
+  "sector": "tech",
+  "domain": "vodafone.com",
+  "td": "VOD",
+  "tdExchange": "LSE"
+ }
+]
