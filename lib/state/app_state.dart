@@ -95,6 +95,14 @@ class AppState extends ChangeNotifier {
     return saved;
   }
 
+  /// Records a deposit into a pot (PiggyVest-style "add to target").
+  Future<Pot> addContribution(Pot p, double amount) async {
+    final updated = p.copyWith(contributions: [...p.contributions, Contribution(amount, DateTime.now())]);
+    final saved = await pots.save(user!.uid, updated);
+    await refreshPots();
+    return saved;
+  }
+
   Future<void> deletePot(String id) async {
     await pots.delete(user!.uid, id);
     await refreshPots();
@@ -106,9 +114,9 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get totalInvested => myPots.fold(0, (s, p) => s + p.amount);
+  double get totalInvested => myPots.fold(0, (s, p) => s + p.invested);
   double get totalValue {
     final prices = stocks.priceMap();
-    return myPots.fold(0, (s, p) => s + p.valueWith(prices));
+    return myPots.fold(0, (s, p) => s + p.valueNow(prices));
   }
 }

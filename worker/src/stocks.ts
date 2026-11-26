@@ -109,7 +109,11 @@ export async function getHistory(symbol: string, market: string, env: Env): Prom
   try {
     const j: any = await (await fetch(u)).json();
     const points = ((j?.values ?? []) as any[]).map((v) => Number(v.close)).filter((n) => n > 0).reverse();
-    return points.length ? { points } : { points, reason: j?.code === 429 ? 'rate_limited' : 'no_data' };
+    if (points.length) return { points };
+    // Twelve Data's free plan covers US listings; most other exchanges need a paid plan.
+    const msg = String(j?.message ?? '');
+    const reason = j?.code === 429 ? 'rate_limited' : j?.code === 403 || /available starting with|upgrade|plan/i.test(msg) ? 'plan' : 'no_data';
+    return { points, reason };
   } catch {
     return { points: [], reason: 'no_data' };
   }

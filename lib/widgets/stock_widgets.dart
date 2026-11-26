@@ -33,7 +33,17 @@ class StockLogo extends StatelessWidget {
       child: ClipOval(
         child: url.isEmpty
             ? letter
-            : Image.network(url, fit: BoxFit.contain, errorBuilder: (_, __, ___) => letter, semanticLabel: '$fallback logo'),
+            : Image.network(
+                url,
+                fit: BoxFit.contain,
+                // Decode at display size, not the source size.
+                cacheWidth: (size * 3).round(),
+                gaplessPlayback: true,
+                // Show the letter until the logo arrives.
+                frameBuilder: (_, child, frame, sync) => sync || frame != null ? child : letter,
+                errorBuilder: (_, __, ___) => letter,
+                semanticLabel: '$fallback logo',
+              ),
       ),
     );
   }

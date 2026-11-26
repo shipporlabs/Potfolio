@@ -120,6 +120,7 @@ class HistoryResult {
   String get message => switch (reason) {
         'no_key' || 'no_worker' => 'Charts turn on once the server has a market data key.',
         'rate_limited' => 'Chart is busy right now. Try again in a minute.',
+        'plan' => 'Charts for this market need a paid market-data plan. Prices still update where available.',
         _ => 'No chart for this stock yet.',
       };
 }

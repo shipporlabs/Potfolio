@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'config.dart';
+import 'targets.dart';
 
 enum Market { us, ng, eu, uk, ke }
 
@@ -155,17 +156,80 @@ class GuardianProposal {
   const GuardianProposal({required this.summary, required this.allocations, required this.risks, this.fromAi = false});
 }
 
+/// A deposit added to a pot after it was created.
+class Contribution {
+  final double amount; // USD
+  final DateTime at;
+  const Contribution(this.amount, this.at);
+  Map<String, dynamic> toJson() => {'amount': amount, 'at': at.toIso8601String()};
+  factory Contribution.fromJson(Map<String, dynamic> j) =>
+      Contribution(_d(j['amount']) ?? 0, DateTime.tryParse('${j['at'] ?? ''}') ?? DateTime.now());
+}
+
 class Pot {
   final String id;
   final String name;
   final Goal goal;
-  final double amount; // USD
+  final double amount; // USD, first deposit
   final List<Allocation> allocations;
   final List<String> risks;
   final DateTime createdAt;
   final String? txHash; // when recorded on Base
+  // Savings target (optional, PiggyVest style)
+  final double? target;
+  final DateTime? targetDate;
+  final Frequency frequency;
+  final String? templateId;
+  final List<Contribution> contributions;
 
-  const Pot({required this.id, required this.name, required this.goal, required this.amount, required this.allocations, required this.risks, required this.createdAt, this.txHash});
+  const Pot({
+    required this.id,
+    required this.name,
+    required this.goal,
+    required this.amount,
+    required this.allocations,
+    required this.risks,
+    required this.createdAt,
+    this.txHash,
+    this.target,
+    this.targetDate,
+    this.frequency = Frequency.monthly,
+    this.templateId,
+    this.contributions = const [],
+  });
+
+  bool get hasTarget => target != null && target! > 0 && targetDate != null;
+
+  /// Everything the saver has put in: first deposit plus later deposits.
+  double get invested => amount + contributions.fold<double>(0, (s, c) => s + c.amount);
+
+  TargetPlan? plan([DateTime? now]) => hasTarget
+      ? TargetPlan(
+          target: target!,
+          start: amount,
+          invested: invested,
+          createdAt: createdAt,
+          targetDate: targetDate!,
+          frequency: frequency,
+          now: now ?? DateTime.now(),
+        )
+      : null;
+
+  Pot copyWith({String? id, List<Contribution>? contributions, String? txHash}) => Pot(
+        id: id ?? this.id,
+        name: name,
+        goal: goal,
+        amount: amount,
+        allocations: allocations,
+        risks: risks,
+        createdAt: createdAt,
+        txHash: txHash ?? this.txHash,
+        target: target,
+        targetDate: targetDate,
+        frequency: frequency,
+        templateId: templateId,
+        contributions: contributions ?? this.contributions,
+      );
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -175,10 +239,16 @@ class Pot {
         'risks': risks,
         'createdAt': createdAt.toIso8601String(),
         'txHash': txHash,
+        'target': target,
+        'targetDate': targetDate?.toIso8601String(),
+        'frequency': frequency.name,
+        'templateId': templateId,
+        'contributions': contributions.map((c) => c.toJson()).toList(),
       };
 
   factory Pot.fromJson(String id, Map<String, dynamic> j) {
     final created = j['createdAt'];
+    final td = j['targetDate'];
     return Pot(
       id: id,
       name: (j['name'] ?? 'My pot') as String,
@@ -188,6 +258,11 @@ class Pot {
       risks: ((j['risks'] as List?) ?? []).map((e) => e.toString()).toList(),
       createdAt: created is Timestamp ? created.toDate() : DateTime.tryParse(created?.toString() ?? '') ?? DateTime.now(),
       txHash: j['txHash'] as String?,
+      target: _d(j['target']),
+      targetDate: td is Timestamp ? td.toDate() : (td == null ? null : DateTime.tryParse(td.toString())),
+      frequency: j['frequency'] == 'weekly' ? Frequency.weekly : Frequency.monthly,
+      templateId: j['templateId'] as String?,
+      contributions: ((j['contributions'] as List?) ?? []).map((e) => Contribution.fromJson(Map<String, dynamic>.from(e as Map))).toList(),
     );
   }
 
@@ -202,4 +277,11 @@ class Pot {
     }
     return v;
   }
+
+  /// Market value of everything put in. Later deposits are assumed to have
+  /// moved like the first one (an estimate until each buy is recorded onchain).
+  double valueNow(Map<String, double> prices) => amount > 0 ? invested * valueWith(prices) / amount : invested;
+
+  /// Gain or loss from the market on top of what the saver put in.
+  double marketGain(Map<String, double> prices) => valueNow(prices) - invested;
 }

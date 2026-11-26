@@ -50,6 +50,15 @@ async function signingKey(pem: string): Promise<CryptoKey> {
   return cachedKey;
 }
 
+/** Light errors are RFC 9457 problem documents: { type, title, status, code, detail, param, request_id }. */
+function problemMessage(data: any, status: number, fallback: string): string {
+  const p = data?.error && typeof data.error === 'object' ? data.error : data;
+  const text = p?.detail ?? p?.title ?? p?.message ?? `${fallback} ${status}`;
+  const code = p?.code ? ` (${p.code}${p?.param ? `: ${p.param}` : ''})` : '';
+  const rid = p?.request_id ? ` · ${p.request_id}` : '';
+  return `${text}${code}${rid}`;
+}
+
 const hex = (buf: ArrayBuffer) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 const b64 = (buf: ArrayBuffer) => btoa(String.fromCharCode(...new Uint8Array(buf)));
 
@@ -72,7 +81,10 @@ export async function lightFetch(env: Env, method: string, path: string, body?: 
   }
   const r = await fetch(`${env.LIGHT_BASE_URL}${path}`, { method, headers, body: method === 'GET' ? undefined : raw });
   const data = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error((data as any)?.error?.message ?? (data as any)?.message ?? `Light error ${r.status}`);
+  if (!r.ok) {
+    console.error('Light', method, path, r.status, JSON.stringify(data));
+    throw new Error(problemMessage(data, r.status, 'Light error'));
+  }
   return data;
 }
 
@@ -85,6 +97,9 @@ export async function lightPublic(env: Env, method: 'GET' | 'POST', path: string
     body: method === 'POST' ? JSON.stringify(body ?? {}) : undefined,
   });
   const data = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error((data as any)?.error?.message ?? (data as any)?.message ?? `Checkout error ${r.status}`);
+  if (!r.ok) {
+    console.error('Light checkout', method, path, r.status, JSON.stringify(data));
+    throw new Error(problemMessage(data, r.status, 'Checkout error'));
+  }
   return data;
 }
