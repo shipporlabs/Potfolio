@@ -17,7 +17,7 @@ Live at **https://usepotfolio.web.app**:
 | --- | --- |
 | `/` | Landing page (`site/index.html`, plain HTML) |
 | `/app/` | The Flutter web app |
-| `/download/potfolio.apk` | Android APK. The button shows "Coming soon" until it exists |
+| Android button | Links to the APK on GitHub Releases (`APK_URL`) |
 
 ### Deploy from your computer
 
@@ -30,16 +30,25 @@ firebase deploy --only hosting
 
 ### Android download
 
-Put your APK at `site/download/potfolio.apk`, then build and deploy as above (or commit it and push; the GitHub Action deploys it).
-Build one with:
+Firebase's free Spark plan blocks `.apk` files, so the APK lives on a **GitHub Release in a public repo**, and the Android button links to
+`https://github.com/shipporlabs/potfolio-releases/releases/latest/download/potfolio.apk` (override with `APK_URL=...`, or `APK_URL=` for "Coming soon").
+
+One-time:
+
+```bash
+gh repo create shipporlabs/potfolio-releases --public -d "Potfolio app downloads"
+```
+
+Each release:
 
 ```bash
 flutter build apk --release --split-per-abi --target-platform android-arm64 \
   --dart-define=WORKER_URL=https://potfolio-api.purpose-money-api.workers.dev
-cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk site/download/potfolio.apk
+cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk potfolio.apk
+gh release create v0.1.0 potfolio.apk -R shipporlabs/potfolio-releases -t "Potfolio 0.1.0" -n "Android build"
 ```
 
-Firebase's free Spark plan allows about **360 MB of downloads per day**, so roughly 15–20 APK downloads a day. Move the APK to other storage if it gets more traffic than that.
+The `latest/download/potfolio.apk` link always points to the newest release, so new APKs don't need a website redeploy.
 
 ### Automatic deploys (GitHub Action)
 

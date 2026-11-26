@@ -1,29 +1,31 @@
 #!/usr/bin/env bash
-# Builds the website into dist/:
-#   /                        landing page (site/)
-#   /app/                    Flutter web app
-#   /download/potfolio.apk   Android APK (your file in site/download/, or built here)
-# Usage:  bash scripts/build_site.sh            # web only (+ your committed APK)
-#         BUILD_APK=1 bash scripts/build_site.sh # also build the APK if none is committed
+# Builds the website into dist/ for Firebase Hosting:
+#   /       landing page (site/)
+#   /app/   Flutter web app
+# Firebase's free plan does not allow .apk files, so the Android button links to
+# APK_URL, by default the latest GitHub Release in shipporlabs/potfolio-releases.
+# Set APK_URL= (empty) to show "Coming soon" instead.
+#
+# Usage:  bash scripts/build_site.sh
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 WORKER_URL="${WORKER_URL:-https://potfolio-api.purpose-money-api.workers.dev}"
+APK_URL="${APK_URL-https://github.com/shipporlabs/potfolio-releases/releases/latest/download/potfolio.apk}"
 
 flutter pub get
 flutter build web --release --base-href /app/ --dart-define=WORKER_URL="$WORKER_URL"
 
-rm -rf dist && mkdir -p dist/app dist/download
+rm -rf dist && mkdir -p dist/app
 cp -r site/. dist/
+rm -rf dist/download dist/_redirects dist/_headers
+find dist -name '*.apk' -delete
 cp -r build/web/. dist/app/
 
-if [ ! -f site/download/potfolio.apk ] && [ "${BUILD_APK:-0}" = "1" ]; then
-  flutter build apk --release --split-per-abi --target-platform android-arm64 \
-    --dart-define=WORKER_URL="$WORKER_URL" || echo "APK build failed, continuing without it"
-  APK=build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-  [ -f "$APK" ] && cp "$APK" dist/download/potfolio.apk
+if [ -n "$APK_URL" ]; then
+  sed "s|/download/potfolio.apk|$APK_URL|g" dist/index.html > dist/index.tmp && mv dist/index.tmp dist/index.html
+  echo "Android button -> $APK_URL"
+else
+  echo "APK_URL is empty. The Android button will show 'Coming soon'."
 fi
-
-[ -f dist/download/potfolio.apk ] && echo "APK included: $(du -h dist/download/potfolio.apk | cut -f1)" \
-  || echo "No APK. The Android button will show 'Coming soon'."
-echo "Site ready in dist/"
+echo "Site ready in dist/ (WORKER_URL=$WORKER_URL)"
