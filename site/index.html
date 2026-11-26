@@ -33,6 +33,11 @@ img{max-width:100%}
 .btn-light{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--line)}
 .btn small{display:block;font-size:11px;font-weight:500;opacity:.75;line-height:1}
 .btn span.two{display:flex;flex-direction:column;line-height:1.15;text-align:left}
+.pi{width:22px;height:22px;flex:none}
+.btn-dark[data-apk] .pi{color:#3DDC84}
+.partners{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:20px 56px}
+.partners a{display:flex;align-items:center;opacity:.9;transition:opacity .2s}
+.partners a:hover{opacity:1}
 .btnrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .card{background:#fff;border-radius:24px;box-shadow:inset 0 0 0 1px var(--line)}
 .lift{transition:transform .3s ease,box-shadow .3s ease}
@@ -134,7 +139,7 @@ footer{border-top:1px solid var(--line)}
   <div class="wrap nav">
     <a class="lockup" href="/" aria-label="Potfolio home"><img src="/assets/mark.svg" alt=""><span class="word">p<span class="donut" data-donut></span>tfolio</span></a>
     <nav class="navlinks" aria-label="Sections"><a href="#how">How it works</a><a href="#tour">Product</a><a href="#ideas">Ideas</a><a href="#faq">FAQ</a></nav>
-    <a class="btn btn-dark" style="height:44px;padding:0 18px;font-size:15px" href="/app/">Open web app</a>
+    <a class="btn btn-dark" style="height:44px;padding:0 18px;font-size:15px" href="/app/">Get started</a>
   </div>
 </header>
 
@@ -147,9 +152,9 @@ footer{border-top:1px solid var(--line)}
       <h1 class="display h1">Build a <span style="white-space:nowrap">p<span class="donut" data-donut></span>rtfolio,</span><br>not a guess.</h1>
       <p class="lead" style="max-width:500px">Tell Potfolio what the money is for. The AI Guardian proposes a mix of US stocks, explains every pick and shows you the risk. You decide, and your pot is saved on Base.</p>
       <div class="btnrow">
-        <a class="btn btn-primary" href="/app/">Open web app <span aria-hidden="true">→</span></a>
-        <a class="btn btn-dark" href="/download/potfolio.apk" data-apk><span class="two"><small>Download for</small>Android</span></a>
-        <button class="btn btn-light" type="button" data-ios><span class="two"><small>On iPhone?</small>Add to Home Screen</span></button>
+        <a class="btn btn-primary" href="/app/">Get started</a>
+        <a class="btn btn-dark" href="/download/potfolio.apk" data-apk><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></svg><span class="two"><small>Download for</small>Android</span></a>
+        <button class="btn btn-light" type="button" data-ios><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="two"><small>On iPhone?</small>Add to Home Screen</span></button>
       </div>
       <div class="ios-note" data-ios-note style="color:var(--navy);background:#fff;box-shadow:inset 0 0 0 1px var(--line)">The iPhone app is coming to the App Store. Until then: open <b>potfolio</b> in Safari, tap <b>Share</b>, then <b>Add to Home Screen</b>. It works like an app.</div>
       <p class="small">Educational, not financial advice. Tokenized stocks are available to eligible users outside the US.</p>
@@ -169,6 +174,17 @@ footer{border-top:1px solid var(--line)}
   <p class="wrap small" style="margin:0 auto 18px;font-size:13px;font-weight:600">Build pots from household names, a fraction at a time</p>
   <div class="track" id="track"></div>
   <p class="wrap small" style="margin:16px auto 0">Examples only. Availability depends on the tokenized stocks live on Base. Logos belong to their owners.</p>
+</section>
+
+<section class="partners-sec" aria-label="Partners" style="background:#fff;padding:40px 0 44px;border-bottom:1px solid var(--line)">
+  <div class="wrap" style="display:flex;flex-direction:column;align-items:center;gap:22px">
+    <p class="eyebrow" style="color:var(--slate)">Built with our partners</p>
+    <div class="partners">
+      <a href="https://base.org" target="_blank" rel="noopener" aria-label="Base"><img src="/assets/partners/base.svg" alt="Base" style="height:30px;width:auto"></a>
+      <a href="https://www.sendlight.xyz" target="_blank" rel="noopener" aria-label="Light by Sendlight"><img src="/assets/partners/light.svg" alt="Light" style="height:34px;width:auto"></a>
+    </div>
+    <p class="small" style="margin:0;text-align:center">Pots live on Base. Checkout and payments by Light.</p>
+  </div>
 </section>
 
 <section id="how" class="sec">
@@ -233,9 +249,9 @@ footer{border-top:1px solid var(--line)}
     <h2 class="display h2" style="color:#fff">Start your first pot today.</h2>
     <p class="lead" style="color:#C9D6F2;max-width:560px">Use Potfolio in your browser, or install it on your phone.</p>
     <div class="btnrow" style="justify-content:center">
-      <a class="btn" style="background:#fff;color:var(--navy)" href="/app/">Open web app <span aria-hidden="true">→</span></a>
-      <a class="btn" style="background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)" href="/download/potfolio.apk" data-apk><span class="two"><small>Download for</small>Android</span></a>
-      <button class="btn" type="button" style="background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)" data-ios><span class="two"><small>On iPhone?</small>Add to Home Screen</span></button>
+      <a class="btn" style="background:#fff;color:var(--navy)" href="/app/">Get started</a>
+      <a class="btn" style="background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)" href="/download/potfolio.apk" data-apk><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></svg><span class="two"><small>Download for</small>Android</span></a>
+      <button class="btn" type="button" style="background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)" data-ios><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="two"><small>On iPhone?</small>Add to Home Screen</span></button>
     </div>
     <div class="ios-note" data-ios-note>The iPhone app is coming to the App Store. Until then: open this site in Safari, tap <b>Share</b>, then <b>Add to Home Screen</b>.</div>
     <p style="margin:0;font-size:13px;color:#8FA3C8;max-width:560px">Android: if your phone asks, allow installs from your browser. The APK is built from our GitHub repository on every release.</p>
@@ -309,7 +325,8 @@ footer{border-top:1px solid var(--line)}
   // iPhone note
   document.querySelectorAll('[data-ios]').forEach(function(b){b.onclick=function(){var n=b.closest('section').querySelector('[data-ios-note]');if(n)n.classList.toggle('show')}});
   // hide APK button if the file is not published yet
-  fetch('/download/potfolio.apk',{method:'HEAD'}).then(function(r){if(!r.ok){document.querySelectorAll('[data-apk]').forEach(function(a){a.removeAttribute('href');a.style.opacity='.55';a.style.pointerEvents='none';a.querySelector('.two').innerHTML='<small>Android APK</small>Coming soon'})}}).catch(function(){});
+  var apkHref=(document.querySelector('[data-apk]')||{}).getAttribute&&document.querySelector('[data-apk]').getAttribute('href')||'';
+  if(apkHref.charAt(0)==='/')fetch(apkHref,{method:'HEAD'}).then(function(r){if(!r.ok){document.querySelectorAll('[data-apk]').forEach(function(a){a.removeAttribute('href');a.style.opacity='.55';a.style.pointerEvents='none';a.querySelector('.two').innerHTML='<small>Android APK</small>Coming soon'})}}).catch(function(){});
 })();
 </script>
 </body>
