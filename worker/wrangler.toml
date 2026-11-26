@@ -9,7 +9,7 @@ binding = "AI"
 # Create with: npx wrangler kv namespace create KV   (then paste the id below)
 [[kv_namespaces]]
 binding = "KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "9d862780cc9d46b4a875df83cd8b197f"
 
 [vars]
 FIREBASE_PROJECT_ID = "REPLACE_WITH_FIREBASE_PROJECT_ID"

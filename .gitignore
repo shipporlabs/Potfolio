@@ -9,3 +9,5 @@ build/
 .dev.vars
 worker/node_modules/
 worker/.wrangler/
+light_private.pem
+light_public.pem
