@@ -280,7 +280,20 @@ class Pot {
 
   /// Market value of everything put in. Later deposits are assumed to have
   /// moved like the first one (an estimate until each buy is recorded onchain).
-  double valueNow(Map<String, double> prices) => amount > 0 ? invested * valueWith(prices) / amount : invested;
+  double valueNow(Map<String, double> prices) => invested * growth(prices);
+
+  /// How the mix has moved since the pot started: 1.0 = flat, 1.05 = up 5%.
+  /// Works for pots that started empty too.
+  double growth(Map<String, double> prices) {
+    var w = 0.0, g = 0.0;
+    for (final a in allocations) {
+      final now = prices[a.symbol];
+      final entry = a.entryPrice;
+      w += a.weight;
+      g += a.weight * ((now != null && entry != null && entry > 0) ? now / entry : 1);
+    }
+    return w > 0 ? g / w : 1;
+  }
 
   /// Gain or loss from the market on top of what the saver put in.
   double marketGain(Map<String, double> prices) => valueNow(prices) - invested;

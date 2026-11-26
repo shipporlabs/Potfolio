@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -49,8 +51,23 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
       _pick(widget.template!, silent: true);
       _step = 1;
     } else {
+      _start = _suggestStart(_tpl);
       _syncFields();
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await context.read<AppState>().refreshBalances();
+      } catch (_) {}
+      if (mounted) setState(() {});
+    });
+  }
+
+  double get _available => context.read<AppState>().available;
+
+  /// About 5% of the target, but never more than the user has free.
+  double _suggestStart(GoalTemplate t) {
+    final want = (t.target * 0.05).clamp(5, 100).roundToDouble();
+    return math.min(want, _available.floorToDouble());
   }
 
   @override
@@ -72,7 +89,7 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
       _goal = t.style;
       _target = t.target;
       _date = t.dateFrom(DateTime.now());
-      _start = (t.target * 0.05).clamp(5, 100).roundToDouble();
+      _start = _suggestStart(t);
       _name.text = t.isCustom ? '' : t.title;
       _syncFields();
     }
@@ -90,7 +107,12 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
 
   String? get _targetError {
     if (_target < 10) return 'Set a target of at least \$10.';
-    if (_start < 1) return 'Start with at least \$1.';
+    if (_start < 0) return 'Enter a starting amount, or \$0 to fund it later.';
+    if (_start > _available + 0.005) {
+      return _available < 1
+          ? 'You have no money free to save yet. Start with \$0 and fund it after you add money.'
+          : 'You have ${money(_available)} free to save. Start with that or less.';
+    }
     if (_start >= _target) return 'Your first deposit already covers the target.';
     if (_date.difference(DateTime.now()).inDays < 28) return 'Pick a date at least 4 weeks away.';
     return null;
@@ -115,7 +137,7 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
     });
     final s = context.read<AppState>();
     _universe = await s.stocks.list(Market.us);
-    final p = await s.guardian.propose(_goal, _start, _universe);
+    final p = await s.guardian.propose(_goal, _start > 0 ? _start : _target, _universe);
     var allocs = p.allocations;
     final pre = widget.preselect;
     if (pre != null && !allocs.any((a) => a.symbol == pre.symbol) && allocs.isNotEmpty) {
@@ -162,7 +184,10 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => PotDetailScreen(pot: saved, justCreated: true)));
     } catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Couldn’t save the pot. Check your connection.')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(e is NotEnoughMoney ? 'You don’t have that much free to save. Lower the first deposit or set it to \$0.' : 'Couldn’t save the pot. Check your connection.')));
+      }
       setState(() => _busy = false);
     }
   }
@@ -328,10 +353,32 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
           const SizedBox(height: 20),
           _MoneyField(
             label: 'Start with',
-            helper: 'Your first deposit. The Guardian builds the mix from this.',
+            helper: 'Free to save: ${money(_available)}. You can start with \$0 and fund it later.',
             controller: _startCtl,
             onChanged: (v) => setState(() => _start = v),
           ),
+          const SizedBox(height: 8),
+          Wrap(spacing: 8, runSpacing: 8, children: [
+            ChoiceChip(
+              label: const Text('Fund later (\$0)'),
+              selected: _start == 0,
+              showCheckmark: false,
+              onSelected: (_) => setState(() {
+                _start = 0;
+                _syncFields();
+              }),
+            ),
+            if (_available >= 1)
+              ChoiceChip(
+                label: Text('All free (${money(math.min(_available, _target).floorToDouble()).replaceAll('.00', '')})'),
+                selected: _start > 0 && _start == math.min(_available, _target).floorToDouble(),
+                showCheckmark: false,
+                onSelected: (_) => setState(() {
+                  _start = math.min(_available, _target).floorToDouble();
+                  _syncFields();
+                }),
+              ),
+          ]),
         ]),
       ),
       const SizedBox(height: 14),
@@ -429,7 +476,7 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
             const SizedBox(height: 14),
             Text('${money(_target)} by ${_dateFmt.format(_date)}', style: display(26, color: Colors.white)),
             const SizedBox(height: 6),
-            Text('Start with ${money(_start)}, then add ${money(_perPeriod)} every ${_freq.per}.',
+            Text(_start > 0 ? 'Start with ${money(_start)}, then add ${money(_perPeriod)} every ${_freq.per}.' : 'Fund it when you’re ready, then add ${money(_perPeriod)} every ${_freq.per}.',
                 style: const TextStyle(color: Color(0xFFC9D6F2), height: 1.4)),
           ]),
         ),
@@ -448,8 +495,10 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
                   const SizedBox(width: 10),
                   Expanded(child: Text(_allocs[i].name)),
                   Text('${_allocs[i].weight.round()}%', style: const TextStyle(fontWeight: FontWeight.w700)),
-                  const SizedBox(width: 12),
-                  SizedBox(width: 72, child: Text(money(_start * _allocs[i].weight / 100), textAlign: TextAlign.right, style: const TextStyle(color: PColors.slate))),
+                  if (_start > 0) ...[
+                    const SizedBox(width: 12),
+                    SizedBox(width: 72, child: Text(money(_start * _allocs[i].weight / 100), textAlign: TextAlign.right, style: const TextStyle(color: PColors.slate))),
+                  ],
                 ]),
               ),
           ]),
@@ -547,7 +596,7 @@ class _PlanPreview extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text('Add ${money(perPeriod)} every ${frequency.per}', style: display(20, weight: FontWeight.w700)),
             const SizedBox(height: 4),
-            Text('${money(start)} now, then $n ${frequency.label.toLowerCase()} deposits, reaches ${money(target)} by ${DateFormat('d MMM yyyy').format(date)}. The plan counts only what you add; any market gain is extra.',
+            Text('${start > 0 ? '${money(start)} now, then' : 'Nothing now, then'} $n ${frequency.label.toLowerCase()} deposits, reaches ${money(target)} by ${DateFormat('d MMM yyyy').format(date)}. The plan counts only what you add; any market gain is extra.',
                 style: const TextStyle(fontSize: 13, color: PColors.slate, height: 1.4)),
           ]),
         ),
