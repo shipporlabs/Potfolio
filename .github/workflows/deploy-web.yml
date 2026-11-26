@@ -1,7 +1,8 @@
 name: Deploy website
 
-# Builds the landing page (site/), the Flutter web app (/app/) and the
-# Android APK (/download/potfolio.apk), then publishes them to Cloudflare Pages.
+# Builds the landing page (site/), the Flutter web app (/app/) and, if no APK
+# is committed at site/download/potfolio.apk, an arm64 APK. Then deploys to
+# Firebase Hosting (https://usepotfolio.web.app).
 on:
   push:
     branches: [main]
@@ -13,14 +14,12 @@ concurrency:
 
 env:
   WORKER_URL: ${{ vars.WORKER_URL || 'https://potfolio-api.purpose-money-api.workers.dev' }}
-  PAGES_PROJECT: ${{ vars.PAGES_PROJECT || 'potfolio' }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      deployments: write
     steps:
       - uses: actions/checkout@v4
 
@@ -34,52 +33,13 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Install packages
-        run: flutter pub get
+      - name: Build site
+        run: BUILD_APK=1 bash scripts/build_site.sh
 
-      - name: Build web app
-        run: |
-          flutter build web --release \
-            --base-href /app/ \
-            --dart-define=WORKER_URL=$WORKER_URL
-
-      # Skipped when you commit your own APK at site/download/potfolio.apk
-      - name: Build Android APK (arm64)
-        if: hashFiles('site/download/potfolio.apk') == ''
-        continue-on-error: true
-        run: |
-          flutter build apk --release \
-            --split-per-abi --target-platform android-arm64 \
-            --dart-define=WORKER_URL=$WORKER_URL
-
-      - name: Assemble site
-        run: |
-          rm -rf dist && mkdir -p dist/app dist/download
-          cp -r site/. dist/
-          cp -r build/web/. dist/app/
-          if [ -f site/download/potfolio.apk ]; then
-            APK=site/download/potfolio.apk   # your uploaded APK wins
-          else
-            APK=build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-          fi
-          rm -f dist/download/potfolio.apk
-          if [ -f "$APK" ]; then
-            SIZE=$(stat -c%s "$APK")
-            # Cloudflare Pages allows files up to 25 MiB
-            if [ "$SIZE" -lt 25000000 ]; then
-              cp "$APK" dist/download/potfolio.apk
-              echo "APK added ($SIZE bytes)"
-            else
-              echo "::warning::APK is $SIZE bytes, over the 25 MiB Pages limit. Skipped."
-            fi
-          else
-            echo "::warning::No APK was built. The landing page will show 'Coming soon'."
-          fi
-          ls -la dist dist/download
-
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ env.PAGES_PROJECT }} --branch=main --commit-dirty=true
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_USEPOTFOLIO }}
+          projectId: usepotfolio
+          channelId: live
