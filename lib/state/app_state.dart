@@ -77,6 +77,19 @@ class AppState extends ChangeNotifier {
     refreshBalances();
   }
 
+  /// Money the user holds: wallet USDC plus card/bank credit from checkout.
+  double get balance => (usdc ?? 0) + (funded ?? 0);
+
+  /// Money already set aside in pots.
+  double get inPots => myPots.fold<double>(0, (s, p) => s + p.invested);
+
+  /// What's free to put into a pot. Pots are envelopes over your balance,
+  /// so a pot can't hold more than you actually have.
+  double get available {
+    final v = balance - inPots;
+    return v > 0 ? v : 0;
+  }
+
   Future<void> refreshBalances() async {
     if (address != null) usdc = await wallet.usdcBalance(address!);
     funded = await checkout.fundedBalance(await auth.idToken());
@@ -93,6 +106,7 @@ class AppState extends ChangeNotifier {
   }
 
   Future<Pot> savePot(Pot p) async {
+    if (p.id.isEmpty && p.amount > available + 0.005) throw const NotEnoughMoney();
     final saved = await pots.save(user!.uid, p);
     await refreshPots();
     return saved;
@@ -100,6 +114,7 @@ class AppState extends ChangeNotifier {
 
   /// Records a deposit into a pot (PiggyVest-style "add to target").
   Future<Pot> addContribution(Pot p, double amount) async {
+    if (amount > available + 0.005) throw const NotEnoughMoney();
     final updated = p.copyWith(contributions: [...p.contributions, Contribution(amount, DateTime.now())]);
     final saved = await pots.save(user!.uid, updated);
     await refreshPots();
@@ -137,4 +152,11 @@ class AppState extends ChangeNotifier {
     final prices = stocks.priceMap();
     return myPots.fold(0, (s, p) => s + p.valueNow(prices));
   }
+}
+
+/// Thrown when a pot would hold more than the user's available balance.
+class NotEnoughMoney implements Exception {
+  const NotEnoughMoney();
+  @override
+  String toString() => 'Not enough money available. Add money first.';
 }
