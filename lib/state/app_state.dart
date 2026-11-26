@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config.dart';
 import '../models.dart';
 import '../services/api.dart';
 import '../services/auth_service.dart';
@@ -32,6 +33,7 @@ class AppState extends ChangeNotifier {
   double? funded;
   List<Pot> myPots = [];
   Set<String> watchlist = {};
+  bool sharedOnce = false;
 
   AppUser? get user => auth.user.value;
 
@@ -39,6 +41,7 @@ class AppState extends ChangeNotifier {
     final p = await SharedPreferences.getInstance();
     onboarded = p.getBool('onboarded') ?? false;
     watchlist = (p.getStringList('watchlist') ?? []).toSet();
+    sharedOnce = p.getBool('shared_once') ?? false;
     ready = true;
     notifyListeners();
   }
@@ -101,6 +104,21 @@ class AppState extends ChangeNotifier {
     final saved = await pots.save(user!.uid, updated);
     await refreshPots();
     return saved;
+  }
+
+  /// Creates a public read-only snapshot of a pot and returns its link.
+  Future<String> sharePotLink(Map<String, dynamic> snapshot) async {
+    final j = await api.post('/share', snapshot, token: await auth.idToken());
+    final id = (j as Map)['id'].toString();
+    await markShared();
+    return '${AppConfig.siteUrl}/p/$id';
+  }
+
+  Future<void> markShared() async {
+    if (sharedOnce) return;
+    sharedOnce = true;
+    (await SharedPreferences.getInstance()).setBool('shared_once', true);
+    notifyListeners();
   }
 
   Future<void> deletePot(String id) async {

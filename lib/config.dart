@@ -10,6 +10,9 @@ class AppConfig {
   /// 'sepolia' (default, for the Stocksmaxxing demo) or 'mainnet'.
   static const network = String.fromEnvironment('BASE_NETWORK', defaultValue: 'sepolia');
 
+  /// Public website, used for share links (https://<site>/p/<id>).
+  static const siteUrl = String.fromEnvironment('SITE_URL', defaultValue: 'https://usepotfolio.web.app');
+
   static bool get hasWorker => workerUrl.isNotEmpty;
   static bool get isMainnet => network == 'mainnet';
 

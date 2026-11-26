@@ -8,8 +8,10 @@ import '../state/app_state.dart';
 import '../targets.dart';
 import '../theme.dart';
 import '../widgets/brand.dart';
+import '../widgets/motion.dart';
 import '../widgets/stock_widgets.dart';
 import 'add_money_screen.dart';
+import 'share_pot_sheet.dart';
 
 class PotDetailScreen extends StatelessWidget {
   final Pot pot;
@@ -28,6 +30,7 @@ class PotDetailScreen extends StatelessWidget {
     final plan = p.plan();
     return Scaffold(
       appBar: AppBar(title: Text(p.name), actions: [
+        IconButton(tooltip: 'Share', icon: const Icon(Icons.ios_share_rounded), onPressed: () => showSharePot(context, p)),
         PopupMenuButton<String>(
           tooltip: 'More',
           onSelected: (k) async {
@@ -214,8 +217,6 @@ class _TargetCard extends StatelessWidget {
       color: PColors.navy,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          Icon(tpl?.icon ?? Icons.flag_rounded, color: Colors.white, size: 20),
-          const SizedBox(width: 8),
           Expanded(child: Text('Target · ${DateFormat('d MMM yyyy').format(plan.targetDate)}', style: const TextStyle(color: Color(0xFFA8B6D4), fontSize: 13))),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -224,20 +225,24 @@ class _TargetCard extends StatelessWidget {
           ),
         ]),
         const SizedBox(height: 10),
-        Text.rich(
-          TextSpan(children: [
-            TextSpan(text: money(plan.invested), style: display(30, color: Colors.white)),
-            TextSpan(text: '  of ${money(plan.target)}', style: const TextStyle(color: Color(0xFFC9D6F2), fontSize: 16, fontWeight: FontWeight.w600)),
-          ]),
-        ),
+        Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              CountUpMoney(plan.invested, style: display(30, color: Colors.white)),
+              Text('of ${money(plan.target)}', style: const TextStyle(color: Color(0xFFC9D6F2), fontSize: 15, fontWeight: FontWeight.w600)),
+            ]),
+          ),
+          if (tpl != null) FloatingArt(tpl.art, height: 64),
+        ]),
         const SizedBox(height: 12),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: LinearProgressIndicator(value: plan.progress, minHeight: 10, backgroundColor: const Color(0xFF233457), color: PColors.midBlue),
+        AnimatedProgressBar(
+          value: plan.progress,
+          color: plan.reached ? const Color(0xFF3DDC97) : PColors.midBlue,
+          background: const Color(0xFF233457),
         ),
         const SizedBox(height: 8),
         Row(children: [
-          Text('${(plan.progress * 100).round()}%', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+          CountUpPercent(plan.progress, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
           const Spacer(),
           Text(plan.reached ? 'Done' : '${money(plan.remaining)} to go · ${plan.daysLeft} days left', style: const TextStyle(color: Color(0xFFC9D6F2), fontSize: 13)),
         ]),

@@ -6,10 +6,12 @@ import '../state/app_state.dart';
 import '../targets.dart';
 import '../theme.dart';
 import '../widgets/brand.dart';
+import '../widgets/motion.dart';
 import '../widgets/stock_widgets.dart';
 import 'add_money_screen.dart';
 import 'create_pot_screen.dart';
 import 'pot_detail_screen.dart';
+import 'share_pot_sheet.dart';
 import 'shell.dart';
 import 'stock_detail_screen.dart';
 
@@ -55,20 +57,8 @@ class HomeScreen extends StatelessWidget {
               _Action(icon: Icons.travel_explore_rounded, label: 'Markets', onTap: () => Shell.goTo(context, 1)),
               _Action(icon: Icons.qr_code_rounded, label: 'Receive', onTap: () => Shell.goTo(context, 3)),
             ]),
-            if (s.address == null) ...[
-              const SizedBox(height: 16),
-              PCard(
-                color: PColors.blueTint,
-                onTap: () => Shell.goTo(context, 3),
-                child: Row(children: [
-                  const Icon(Icons.account_balance_wallet_rounded, color: PColors.blue),
-                  const SizedBox(width: 12),
-                  const Expanded(child: Text('Get your free Base wallet to receive USDC and hold tokenized stocks.', style: TextStyle(fontSize: 14, height: 1.4))),
-                  const Icon(Icons.chevron_right_rounded),
-                ]),
-              ),
-            ],
             const SizedBox(height: 12),
+            const _ThingsToDo(),
             SectionTitle('Your pots', action: s.myPots.isEmpty ? null : 'See all', onAction: () => Shell.goTo(context, 2)),
             if (s.myPots.isEmpty)
               PCard(
@@ -99,7 +89,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 8),
             SectionTitle('Start a goal', action: 'All goals', onAction: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreatePotScreen()))),
             SizedBox(
-              height: 112,
+              height: 150,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: goalTemplates.length,
@@ -239,10 +229,7 @@ class PotCard extends StatelessWidget {
             style: const TextStyle(fontSize: 13, color: PColors.slate),
           ),
           const SizedBox(height: 12),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(value: plan.progress, minHeight: 8, backgroundColor: PColors.line, color: plan.reached ? PColors.gain : PColors.blue),
-          ),
+          AnimatedProgressBar(value: plan.progress, height: 8, background: PColors.line, color: plan.reached ? PColors.gain : PColors.blue),
         ],
       ]),
     );
@@ -254,23 +241,116 @@ class _GoalChip extends StatelessWidget {
   const _GoalChip({required this.t});
   @override
   Widget build(BuildContext context) => SizedBox(
-        width: 132,
+        width: 150,
         child: PCard(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(8),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => CreatePotScreen(template: t))),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(color: t.tint, borderRadius: BorderRadius.circular(10)),
-              child: Icon(t.icon, size: 20, color: PColors.navy),
+            Expanded(child: Center(child: FloatingArt(t.art, height: 78, animate: false))),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(6, 6, 6, 2),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(t.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                Text(t.isCustom ? 'Set your own' : money(t.target).replaceAll('.00', ''), style: const TextStyle(fontSize: 12, color: PColors.slate)),
+              ]),
             ),
-            const Spacer(),
-            Text(t.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-            Text(t.isCustom ? 'Set your own' : money(t.target).replaceAll('.00', ''), style: const TextStyle(fontSize: 12, color: PColors.slate)),
           ]),
         ),
       );
+}
+
+class _Todo {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool done;
+  final bool urgent;
+  final VoidCallback onTap;
+  const _Todo(this.icon, this.title, this.subtitle, {required this.done, required this.onTap, this.urgent = false});
+}
+
+/// A short, friendly checklist: setup steps first, then deposits that are due.
+class _ThingsToDo extends StatelessWidget {
+  const _ThingsToDo();
+
+  @override
+  Widget build(BuildContext context) {
+    final s = context.watch<AppState>();
+    final now = DateTime.now();
+    final items = <_Todo>[];
+
+    // Deposits due in the next 3 days, or pots behind plan.
+    for (final p in s.myPots) {
+      final plan = p.plan(now);
+      if (plan == null || plan.reached || plan.overdue) continue;
+      final daysToDue = plan.nextDue.difference(now).inDays;
+      if (plan.delta < -0.5 || daysToDue <= 3) {
+        items.add(_Todo(
+          Icons.savings_rounded,
+          'Add ${money(plan.perPeriod)} to ${p.name}',
+          plan.delta < -0.5 ? '${money(-plan.delta)} behind plan' : (daysToDue <= 0 ? 'Due today' : 'Due in $daysToDue ${daysToDue == 1 ? 'day' : 'days'}'),
+          done: false,
+          urgent: plan.delta < -0.5,
+          onTap: () => showAddDeposit(context, p),
+        ));
+      }
+      if (items.length >= 2) break;
+    }
+
+    final setup = <_Todo>[
+      _Todo(Icons.account_balance_wallet_rounded, 'Get your Base wallet', 'Free, takes a second', done: s.address != null, onTap: () => Shell.goTo(context, 3)),
+      _Todo(Icons.flag_rounded, 'Start your first goal', 'Rent, phone, japa or your own', done: s.myPots.isNotEmpty,
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreatePotScreen()))),
+      _Todo(Icons.add_card_rounded, 'Add money', 'Card or bank, arrives as USDC', done: (s.funded ?? 0) > 0,
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddMoneyScreen()))),
+      if (s.myPots.isNotEmpty)
+        _Todo(Icons.ios_share_rounded, 'Share a pot', 'Friends keep you on track', done: s.sharedOnce, onTap: () => showSharePot(context, s.myPots.first)),
+    ];
+    final doneCount = setup.where((t) => t.done).length;
+    final open = [...items, ...setup.where((t) => !t.done)];
+    if (open.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: PCard(
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(children: [
+            Text('Things to do', style: display(18, weight: FontWeight.w700)),
+            const Spacer(),
+            Text('$doneCount of ${setup.length} set up', style: const TextStyle(fontSize: 12, color: PColors.slate, fontWeight: FontWeight.w600)),
+          ]),
+          const SizedBox(height: 10),
+          AnimatedProgressBar(value: setup.isEmpty ? 1 : doneCount / setup.length, height: 6, color: PColors.gain, background: PColors.line),
+          const SizedBox(height: 6),
+          for (final t in open.take(4))
+            InkWell(
+              borderRadius: BorderRadius.circular(14),
+              onTap: t.onTap,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(children: [
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(color: t.urgent ? PColors.clayTint : PColors.blueTint, borderRadius: BorderRadius.circular(12)),
+                    child: Icon(t.icon, size: 20, color: t.urgent ? PColors.clay : PColors.blue),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(t.title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                      Text(t.subtitle, style: TextStyle(fontSize: 12, color: t.urgent ? PColors.clay : PColors.slate)),
+                    ]),
+                  ),
+                  const Icon(Icons.chevron_right_rounded, color: PColors.slate),
+                ]),
+              ),
+            ),
+        ]),
+      ),
+    );
+  }
 }
 
 class _LearnCard extends StatelessWidget {
