@@ -1,0 +1,87 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter pub get --no-example
+
+## exception
+
+FileSystemException: FileSystemException: Deletion failed, path = '/Users/mac/Developer/potfolio/ios/Flutter/ephemeral/Packages/.packages' (OS Error: Directory not empty, errno = 66)
+
+```
+#0      _Directory._deleteSync (dart:io/directory_impl.dart:216:7)
+#1      FileSystemEntity.deleteSync (dart:io/file_system_entity.dart:425:7)
+#2      ForwardingFileSystemEntity.deleteSync (package:file/src/forwarding/forwarding_file_system_entity.dart:70:16)
+#3      ErrorHandlingDirectory.deleteSync.<anonymous closure> (package:flutter_tools/src/base/error_handling_io.dart:717:22)
+#4      _runSync (package:flutter_tools/src/base/error_handling_io.dart:1118:16)
+#5      ErrorHandlingDirectory.deleteSync (package:flutter_tools/src/base/error_handling_io.dart:716:12)
+#6      ErrorHandlingFileSystem.deleteIfExists (package:flutter_tools/src/base/error_handling_io.dart:132:20)
+#7      SwiftPackageManager.generatePluginsSwiftPackage (package:flutter_tools/src/macos/swift_package_manager.dart:66:29)
+#8      DarwinDependencyManagement.setUp (package:flutter_tools/src/macos/darwin_dependency_management.dart:63:34)
+#9      injectPlugins (package:flutter_tools/src/flutter_plugins.dart:1466:42)
+<asynchronous suspension>
+#10     FlutterProject.ensureReadyForPlatformSpecificTooling (package:flutter_tools/src/project.dart:471:5)
+<asynchronous suspension>
+#11     PackagesGetCommand.runCommand.<anonymous closure> (package:flutter_tools/src/commands/packages.dart:400:9)
+<asynchronous suspension>
+#12     Pool.forEach.run (package:pool/pool.dart:183:19)
+<asynchronous suspension>
+#13     Pool.withResource (package:pool/pool.dart:127:14)
+<asynchronous suspension>
+#14     Future.wait.<anonymous closure> (dart:async/future.dart:567:21)
+<asynchronous suspension>
+#15     Pool.forEach.onListen.<anonymous closure> (package:pool/pool.dart:203:23)
+<asynchronous suspension>
+#16     _StreamController.close (dart:async/stream_controller.dart:640:3)
+<asynchronous suspension>
+#17     _nullDataHandler (dart:async/stream_impl.dart:549:1)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[!] Flutter (Channel stable, 3.47.0, on macOS 15.7.1 24G231 darwin-x64, locale en-GB) [1,468ms]
+    ! Flutter is deprecating support for Intel-based Macs. A future version of Flutter will require an Apple Silicon Mac to build applications.
+    • Flutter version 3.47.0 on channel stable at /Users/mac/Developer/flutter
+    ! The flutter binary is not on your path. Consider adding /Users/mac/Developer/flutter/bin to your path.
+    ! The dart binary is not on your path. Consider adding /Users/mac/Developer/flutter/bin to your path.
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 4cf2416426 (4 months ago), 2026-08-11 11:53:49 -0700
+    • Engine revision 5f77625673
+    • Dart version 3.13.0
+    • DevTools version 2.60.0
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, enable-record-use, enable-swift-package-manager, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration
+    • If those were intentional, you can disregard the above warnings; however it is recommended to use "git" directly to perform update checks and upgrades.
+
+[!] Android toolchain - develop for Android devices (Android SDK version 36.1.0) [12.6s]
+    • Android SDK at /Users/mac/Library/Android/sdk
+    • Emulator version 36.2.12.0 (build_id 14214601) (CL:N/A)
+    • Platform android-36, build-tools 36.1.0
+    • ANDROID_HOME = /Users/mac/Library/Android/sdk
+    • Java binary at: /Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/java
+      This is the JDK bundled with the latest Android Studio installation on this machine.
+      To manually set the JDK path, use: `flutter config --jdk-dir="path/to/jdk"`.
+    • Java version OpenJDK Runtime Environment (build 21.0.8+-14018985-b1038.68)
+    ! Some Android licenses not accepted. To resolve this, run: flutter doctor --android-licenses
+
+[✓] Xcode - develop for iOS and macOS (Xcode 26.2) [14.4s]
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Build 17C52
+    • CocoaPods version 1.16.2
+
+[✓] Chrome - develop for the web [57ms]
+    • Chrome at /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+
+[✓] Connected device (4 available) [14.2s]
+    • sdk gphone64 x86 64 (mobile)     • emulator-5554             • android-x64    • Android 16 (API 36) (emulator)
+    • Gideon Jones (wireless) (mobile) • 00008030-001C119E2182802E • ios            • iOS 26.2.1 23C71
+    • macOS (desktop)                  • macos                     • darwin-x64     • macOS 15.7.1 24G231 darwin-x64
+    • Chrome (web)                     • chrome                    • web-javascript • Google Chrome 158.0.8127.37
+
+[✓] Network resources [1,528ms]
+    • All expected network resources are available.
+
+! Doctor found issues in 2 categories.
+```
