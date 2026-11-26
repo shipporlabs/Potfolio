@@ -1,0 +1,21 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+
+/assets/*
+  Cache-Control: public, max-age=604800
+
+/app/index.html
+  Cache-Control: no-cache
+
+/app/flutter_service_worker.js
+  Cache-Control: no-cache
+
+/app/flutter_bootstrap.js
+  Cache-Control: no-cache
+
+/download/*
+  Content-Type: application/vnd.android.package-archive
+  Content-Disposition: attachment; filename="potfolio.apk"
+  Cache-Control: no-cache
