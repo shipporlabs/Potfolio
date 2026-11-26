@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../models.dart';
@@ -8,6 +9,7 @@ import '../state/app_state.dart';
 import '../targets.dart';
 import '../theme.dart';
 import '../widgets/brand.dart';
+import '../widgets/motion.dart';
 import '../widgets/stock_widgets.dart';
 import 'pot_detail_screen.dart';
 
@@ -256,12 +258,7 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
       PCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(color: _tpl.tint, borderRadius: BorderRadius.circular(12)),
-              child: Icon(_tpl.icon, color: PColors.navy, size: 22),
-            ),
+            SvgPicture.asset(_tpl.art, height: 56),
             const SizedBox(width: 12),
             Expanded(
               child: TextField(
@@ -426,9 +423,8 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
           color: PColors.navy,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
-              Icon(_tpl.icon, color: Colors.white),
-              const SizedBox(width: 10),
               Expanded(child: Text(_potName, style: display(22, color: Colors.white, weight: FontWeight.w700))),
+              FloatingArt(_tpl.art, height: 64),
             ]),
             const SizedBox(height: 14),
             Text('${money(_target)} by ${_dateFmt.format(_date)}', style: display(26, color: Colors.white)),
@@ -477,34 +473,40 @@ class _TemplateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final m = monthsBetween(now, t.dateFrom(now));
-    return Material(
-      color: selected ? PColors.blueTint : Colors.white,
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
+    return AnimatedScale(
+      scale: selected ? 1.0 : 0.97,
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOutBack,
+      child: Material(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        onTap: onTap,
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 150),
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: selected ? PColors.blue : PColors.line, width: selected ? 1.5 : 1),
-          ),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(color: selected ? PColors.blue : t.tint, borderRadius: BorderRadius.circular(12)),
-              child: Icon(t.icon, size: 22, color: selected ? Colors.white : PColors.navy),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: selected ? PColors.blue : PColors.line, width: selected ? 2 : 1),
+              boxShadow: selected ? [BoxShadow(color: PColors.blue.withValues(alpha: 0.15), blurRadius: 18, offset: const Offset(0, 8))] : const [],
             ),
-            const SizedBox(height: 10),
-            Text(t.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 2),
-            Text(t.blurb, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: PColors.slate, height: 1.35)),
-            const SizedBox(height: 8),
-            Text(t.isCustom ? 'You decide' : '${money(t.target).replaceAll('.00', '')} · $m mo',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: PColors.blue)),
-          ]),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Center(child: FloatingArt(t.art, height: 86, animate: selected)),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(t.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 2),
+                  Text(t.blurb, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: PColors.slate, height: 1.35)),
+                  const SizedBox(height: 6),
+                  Text(t.isCustom ? 'You decide' : '${money(t.target).replaceAll('.00', '')} · $m mo',
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: PColors.blue)),
+                ]),
+              ),
+            ]),
+          ),
         ),
       ),
     );
