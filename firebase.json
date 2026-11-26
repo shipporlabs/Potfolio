@@ -38,10 +38,7 @@
       }
     }
   },
-  "firestore": {
-    "database": "(default)",
-    "location": "eur3",
-    "rules": "Y",
-    "indexes": "Y"
+   "firestore": {
+    "rules": "firestore.rules"
   }
 }
