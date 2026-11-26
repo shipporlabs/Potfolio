@@ -103,7 +103,7 @@ class StockTile extends StatelessWidget {
                     style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, fontFeatures: [FontFeature.tabularFigures()])),
                 const SizedBox(height: 2),
                 if (ch != null)
-                  Text(pct(ch), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: ch >= 0 ? PColors.gain : PColors.loss)),
+                  Text(pct(ch), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: ch >= 0 ? PColors.gain : PColors.loss))
                 else
                   Text(stock.investable ? 'On Base' : 'Watch', style: const TextStyle(fontSize: 12, color: PColors.slate)),
               ]),
