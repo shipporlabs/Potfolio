@@ -47,6 +47,9 @@ class GoalTemplate {
   }
 
   bool get isCustom => id == 'custom';
+
+  /// Flat illustration in assets/illustrations/.
+  String get art => 'assets/illustrations/goal_$id.svg';
 }
 
 const goalTemplates = <GoalTemplate>[
