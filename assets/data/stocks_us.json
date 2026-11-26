@@ -1,0 +1,202 @@
+[
+ {
+  "symbol": "AAPL",
+  "name": "Apple",
+  "exchange": "NASDAQ",
+  "sector": "tech",
+  "domain": "apple.com",
+  "td": "AAPL"
+ },
+ {
+  "symbol": "NVDA",
+  "name": "NVIDIA",
+  "exchange": "NASDAQ",
+  "sector": "tech",
+  "domain": "nvidia.com",
+  "td": "NVDA"
+ },
+ {
+  "symbol": "MSFT",
+  "name": "Microsoft",
+  "exchange": "NASDAQ",
+  "sector": "tech",
+  "domain": "microsoft.com",
+  "td": "MSFT"
+ },
+ {
+  "symbol": "GOOGL",
+  "name": "Alphabet",
+  "exchange": "NASDAQ",
+  "sector": "tech",
+  "domain": "abc.xyz",
+  "td": "GOOGL"
+ },
+ {
+  "symbol": "AMZN",
+  "name": "Amazon",
+  "exchange": "NASDAQ",
+  "sector": "consumer",
+  "domain": "amazon.com",
+  "td": "AMZN"
+ },
+ {
+  "symbol": "META",
+  "name": "Meta",
+  "exchange": "NASDAQ",
+  "sector": "tech",
+  "domain": "meta.com",
+  "td": "META"
+ },
+ {
+  "symbol": "TSLA",
+  "name": "Tesla",
+  "exchange": "NASDAQ",
+  "sector": "consumer",
+  "domain": "tesla.com",
+  "td": "TSLA"
+ },
+ {
+  "symbol": "NFLX",
+  "name": "Netflix",
+  "exchange": "NASDAQ",
+  "sector": "consumer",
+  "domain": "netflix.com",
+  "td": "NFLX"
+ },
+ {
+  "symbol": "AMD",
+  "name": "AMD",
+  "exchange": "NASDAQ",
+  "sector": "tech",
+  "domain": "amd.com",
+  "td": "AMD"
+ },
+ {
+  "symbol": "COIN",
+  "name": "Coinbase",
+  "exchange": "NASDAQ",
+  "sector": "finance",
+  "domain": "coinbase.com",
+  "td": "COIN"
+ },
+ {
+  "symbol": "V",
+  "name": "Visa",
+  "exchange": "NYSE",
+  "sector": "finance",
+  "domain": "visa.com",
+  "td": "V"
+ },
+ {
+  "symbol": "MA",
+  "name": "Mastercard",
+  "exchange": "NYSE",
+  "sector": "finance",
+  "domain": "mastercard.com",
+  "td": "MA"
+ },
+ {
+  "symbol": "JPM",
+  "name": "JPMorgan Chase",
+  "exchange": "NYSE",
+  "sector": "finance",
+  "domain": "jpmorganchase.com",
+  "td": "JPM"
+ },
+ {
+  "symbol": "KO",
+  "name": "Coca-Cola",
+  "exchange": "NYSE",
+  "sector": "consumer",
+  "domain": "coca-colacompany.com",
+  "td": "KO"
+ },
+ {
+  "symbol": "PG",
+  "name": "Procter & Gamble",
+  "exchange": "NYSE",
+  "sector": "consumer",
+  "domain": "pg.com",
+  "td": "PG"
+ },
+ {
+  "symbol": "JNJ",
+  "name": "Johnson & Johnson",
+  "exchange": "NYSE",
+  "sector": "health",
+  "domain": "jnj.com",
+  "td": "JNJ"
+ },
+ {
+  "symbol": "UNH",
+  "name": "UnitedHealth",
+  "exchange": "NYSE",
+  "sector": "health",
+  "domain": "unitedhealthgroup.com",
+  "td": "UNH"
+ },
+ {
+  "symbol": "NKE",
+  "name": "Nike",
+  "exchange": "NYSE",
+  "sector": "consumer",
+  "domain": "nike.com",
+  "td": "NKE"
+ },
+ {
+  "symbol": "SPOT",
+  "name": "Spotify",
+  "exchange": "NYSE",
+  "sector": "consumer",
+  "domain": "spotify.com",
+  "td": "SPOT"
+ },
+ {
+  "symbol": "SHOP",
+  "name": "Shopify",
+  "exchange": "NYSE",
+  "sector": "tech",
+  "domain": "shopify.com",
+  "td": "SHOP"
+ },
+ {
+  "symbol": "PYPL",
+  "name": "PayPal",
+  "exchange": "NASDAQ",
+  "sector": "finance",
+  "domain": "paypal.com",
+  "td": "PYPL"
+ },
+ {
+  "symbol": "UBER",
+  "name": "Uber",
+  "exchange": "NYSE",
+  "sector": "tech",
+  "domain": "uber.com",
+  "td": "UBER"
+ },
+ {
+  "symbol": "XOM",
+  "name": "ExxonMobil",
+  "exchange": "NYSE",
+  "sector": "energy",
+  "domain": "exxonmobil.com",
+  "td": "XOM"
+ },
+ {
+  "symbol": "WMT",
+  "name": "Walmart",
+  "exchange": "NYSE",
+  "sector": "consumer",
+  "domain": "walmart.com",
+  "td": "WMT"
+ },
+ {
+  "symbol": "COST",
+  "name": "Costco",
+  "exchange": "NASDAQ",
+  "sector": "consumer",
+  "domain": "costco.com",
+  "td": "COST"
+ }
+]

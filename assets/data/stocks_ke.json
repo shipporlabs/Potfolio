@@ -1,0 +1,44 @@
+[
+ {
+  "symbol": "SCOM",
+  "name": "Safaricom",
+  "exchange": "NSE Kenya",
+  "sector": "tech",
+  "domain": "safaricom.co.ke"
+ },
+ {
+  "symbol": "KCB",
+  "name": "KCB Group",
+  "exchange": "NSE Kenya",
+  "sector": "finance",
+  "domain": "kcbgroup.com"
+ },
+ {
+  "symbol": "EQTY",
+  "name": "Equity Group",
+  "exchange": "NSE Kenya",
+  "sector": "finance",
+  "domain": "equitygroupholdings.com"
+ },
+ {
+  "symbol": "EABL",
+  "name": "East African Breweries",
+  "exchange": "NSE Kenya",
+  "sector": "consumer",
+  "domain": "eabl.com"
+ },
+ {
+  "symbol": "COOP",
+  "name": "Co-op Bank",
+  "exchange": "NSE Kenya",
+  "sector": "finance",
+  "domain": "co-opbank.co.ke"
+ },
+ {
+  "symbol": "BAT",
+  "name": "BAT Kenya",
+  "exchange": "NSE Kenya",
+  "sector": "consumer",
+  "domain": "batkenya.com"
+ }
+]
