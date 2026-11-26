@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models.dart';
 import '../state/app_state.dart';
+import '../targets.dart';
 import '../theme.dart';
 import '../widgets/brand.dart';
 import '../widgets/stock_widgets.dart';
@@ -95,6 +96,17 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 10),
                     child: PotCard(pot: p, prices: s.stocks.priceMap()),
                   )),
+            const SizedBox(height: 8),
+            SectionTitle('Start a goal', action: 'All goals', onAction: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreatePotScreen()))),
+            SizedBox(
+              height: 112,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: goalTemplates.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                itemBuilder: (context, i) => _GoalChip(t: goalTemplates[i]),
+              ),
+            ),
             const SizedBox(height: 8),
             SectionTitle('On Base today', action: 'Markets', onAction: () => Shell.goTo(context, 1)),
             FutureBuilder<List<Stock>>(
@@ -198,8 +210,9 @@ class PotCard extends StatelessWidget {
   const PotCard({super.key, required this.pot, required this.prices});
   @override
   Widget build(BuildContext context) {
-    final v = pot.valueWith(prices);
-    final ch = pot.amount > 0 ? (v - pot.amount) / pot.amount * 100 : 0.0;
+    final v = pot.valueNow(prices);
+    final ch = pot.invested > 0 ? (v - pot.invested) / pot.invested * 100 : 0.0;
+    final plan = pot.plan();
     return PCard(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => PotDetailScreen(pot: pot))),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -214,12 +227,50 @@ class PotCard extends StatelessWidget {
         const SizedBox(height: 12),
         Text(pot.name, style: display(18, weight: FontWeight.w700)),
         const SizedBox(height: 2),
-        Text('${pot.goal.label} · ${pot.allocations.length} stocks', style: const TextStyle(fontSize: 13, color: PColors.slate)),
-        const SizedBox(height: 12),
-        AllocationBar(weights: pot.allocations.map((a) => a.weight).toList(), height: 8),
+        if (plan == null) ...[
+          Text('${pot.goal.label} · ${pot.allocations.length} stocks', style: const TextStyle(fontSize: 13, color: PColors.slate)),
+          const SizedBox(height: 12),
+          AllocationBar(weights: pot.allocations.map((a) => a.weight).toList(), height: 8),
+        ] else ...[
+          Text(
+            plan.reached
+                ? 'Target reached · ${money(plan.target)}'
+                : '${money(plan.invested)} of ${money(plan.target)} · ${money(plan.perPeriod)}/${pot.frequency.short}',
+            style: const TextStyle(fontSize: 13, color: PColors.slate),
+          ),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(value: plan.progress, minHeight: 8, backgroundColor: PColors.line, color: plan.reached ? PColors.gain : PColors.blue),
+          ),
+        ],
       ]),
     );
   }
+}
+
+class _GoalChip extends StatelessWidget {
+  final GoalTemplate t;
+  const _GoalChip({required this.t});
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        width: 132,
+        child: PCard(
+          padding: const EdgeInsets.all(12),
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => CreatePotScreen(template: t))),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(color: t.tint, borderRadius: BorderRadius.circular(10)),
+              child: Icon(t.icon, size: 20, color: PColors.navy),
+            ),
+            const Spacer(),
+            Text(t.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+            Text(t.isCustom ? 'Set your own' : money(t.target).replaceAll('.00', ''), style: const TextStyle(fontSize: 12, color: PColors.slate)),
+          ]),
+        ),
+      );
 }
 
 class _LearnCard extends StatelessWidget {
