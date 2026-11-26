@@ -10,10 +10,12 @@ type Stock = { symbol: string; name: string; exchange: string; sector: string; d
 const LISTS: Record<string, Stock[]> = { US: US as Stock[], NG: NG as Stock[], EU: EU as Stock[], UK: UK as Stock[], KE: KE as Stock[] };
 const TOKENIZED = 'https://api.coinbase.com/v1/tokenized-stocks';
 
+/** Coinbase tokenized tickers carry a lowercase suffix (AAPLc, older AAPLx).
+ *  Strip it so they match the plain exchange ticker in our lists. */
 const norm = (t: string) => {
-  let x = t.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  if (x.length > 1 && x.endsWith('X')) x = x.slice(0, -1);
-  return x;
+  let x = t.trim();
+  if (x.length > 1 && /[a-z]$/.test(x) && /[A-Z]/.test(x.slice(0, -1))) x = x.slice(0, -1);
+  return x.toUpperCase().replace(/[^A-Z0-9]/g, '');
 };
 
 async function cached<T>(key: string, ttl: number, ctx: ExecutionContext, fn: () => Promise<T>): Promise<T> {
@@ -94,8 +96,9 @@ async function withQuotes(base: Stock[], key: string): Promise<Stock[]> {
   });
 }
 
-export async function getHistory(symbol: string, market: string, env: Env): Promise<number[]> {
-  if (!env.TWELVE_DATA_KEY || !symbol) return [];
+export async function getHistory(symbol: string, market: string, env: Env): Promise<{ points: number[]; reason?: string }> {
+  if (!env.TWELVE_DATA_KEY) return { points: [], reason: 'no_key' };
+  if (!symbol) return { points: [], reason: 'no_data' };
   const s = (LISTS[market] ?? []).find((x) => x.symbol === symbol);
   const u = new URL('https://api.twelvedata.com/time_series');
   u.searchParams.set('symbol', s?.td ?? symbol);
@@ -105,8 +108,9 @@ export async function getHistory(symbol: string, market: string, env: Env): Prom
   u.searchParams.set('apikey', env.TWELVE_DATA_KEY);
   try {
     const j: any = await (await fetch(u)).json();
-    return ((j?.values ?? []) as any[]).map((v) => Number(v.close)).filter((n) => n > 0).reverse();
+    const points = ((j?.values ?? []) as any[]).map((v) => Number(v.close)).filter((n) => n > 0).reverse();
+    return points.length ? { points } : { points, reason: j?.code === 429 ? 'rate_limited' : 'no_data' };
   } catch {
-    return [];
+    return { points: [], reason: 'no_data' };
   }
 }

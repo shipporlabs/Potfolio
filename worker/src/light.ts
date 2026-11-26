@@ -7,11 +7,46 @@ import type { Env } from './index';
  */
 let cachedKey: CryptoKey | null = null;
 
+const PKCS8_ED25519_PREFIX = [0x30, 0x2e, 0x02, 0x01, 0x00, 0x30, 0x05, 0x06, 0x03, 0x2b, 0x65, 0x70, 0x04, 0x22, 0x04, 0x20];
+
+/** Accepts the private key as PKCS#8 PEM (openssl genpkey), the PEM body alone,
+ *  an OpenSSH key (ssh-keygen -t ed25519), or a raw 32/64-byte key in base64 or hex.
+ *  Gives a clear error for the common mistakes (empty, public key, one PEM line). */
+export function toPkcs8(input: string): Uint8Array {
+  const text = (input ?? '').replace(/\\n/g, '\n').trim();
+  if (!text) throw new Error('LIGHT_SIGNING_KEY is not set. Run: npx wrangler secret put LIGHT_SIGNING_KEY < light_private.pem');
+  if (/PUBLIC KEY/.test(text)) throw new Error('LIGHT_SIGNING_KEY holds the public key. Store the private key; the public key goes in the Light dashboard.');
+  const body = text.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');
+  if (!body) throw new Error('LIGHT_SIGNING_KEY only has the PEM header line. Pipe the whole file: npx wrangler secret put LIGHT_SIGNING_KEY < light_private.pem');
+  let raw: Uint8Array;
+  if (/^[0-9a-fA-F]+$/.test(body) && (body.length === 64 || body.length === 128)) {
+    raw = Uint8Array.from(body.match(/../g)!.map((h) => parseInt(h, 16)));
+  } else {
+    try {
+      raw = Uint8Array.from(atob(body.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0));
+    } catch {
+      throw new Error('LIGHT_SIGNING_KEY is not valid base64/PEM.');
+    }
+  }
+  const seedToPkcs8 = (seed: Uint8Array) => Uint8Array.from([...PKCS8_ED25519_PREFIX, ...seed]);
+  if (raw.length === 48 && raw[0] === 0x30) return raw; // PKCS#8 Ed25519
+  if (raw.length === 44 && raw[0] === 0x30) throw new Error('LIGHT_SIGNING_KEY holds the public key, not the private key.');
+  if (raw.length === 32) return seedToPkcs8(raw);
+  if (raw.length === 64) return seedToPkcs8(raw.slice(0, 32));
+  const magic = new TextDecoder().decode(raw.slice(0, 14));
+  if (magic === 'openssh-key-v1') {
+    // The private section ends with the 64-byte key (seed + public key) right after the
+    // second copy of the public key, preceded by its length (0x00000040).
+    for (let i = raw.length - 68; i > 0; i--) {
+      if (raw[i] === 0 && raw[i + 1] === 0 && raw[i + 2] === 0 && raw[i + 3] === 0x40) return seedToPkcs8(raw.slice(i + 4, i + 36));
+    }
+  }
+  throw new Error(`LIGHT_SIGNING_KEY is not an Ed25519 private key (got ${raw.length} bytes).`);
+}
+
 async function signingKey(pem: string): Promise<CryptoKey> {
   if (cachedKey) return cachedKey;
-  const b64 = pem.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');
-  const der = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-  cachedKey = await crypto.subtle.importKey('pkcs8', der, { name: 'Ed25519' }, false, ['sign']);
+  cachedKey = await crypto.subtle.importKey('pkcs8', toPkcs8(pem), { name: 'Ed25519' }, false, ['sign']);
   return cachedKey;
 }
 
