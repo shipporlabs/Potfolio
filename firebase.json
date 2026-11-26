@@ -44,9 +44,6 @@
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "_redirects", "_headers", "**/*.apk"],
-    "redirects": [
-      { "source": "/app", "destination": "/app/", "type": 301 }
-    ],
     "rewrites": [
       { "source": "/app/**", "destination": "/app/index.html" }
     ],
