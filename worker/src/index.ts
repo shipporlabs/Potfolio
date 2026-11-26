@@ -82,7 +82,7 @@ async function proxyLogo(target: string, ctx: ExecutionContext): Promise<Respons
   }
   if (!r.ok || !type.startsWith('image/')) throw new HttpError(404, 'Logo not found');
   const buf = await r.arrayBuffer();
-  const out = new Response(buf, { headers: { 'content-type': type, 'cache-control': 'public, max-age=604800' } });
+  const out = new Response(buf, { headers: { 'content-type': type, 'cache-control': 'public, max-age=2592000, immutable' } });
   ctx.waitUntil(cache.put(key, out.clone()));
   return out;
 }
@@ -113,12 +113,14 @@ export default {
         const uid = await requireUser(req, env);
         const { amountUsd } = (await req.json()) as { amountUsd: number };
         if (!(amountUsd >= 1 && amountUsd <= 10000)) throw new HttpError(400, 'Amount must be between $1 and $10,000');
-        const reference = `${uid}:${crypto.randomUUID()}`;
+        // Short, unique reference (Light requires it unique per checkout); the uid is kept in KV.
+        const reference = `pf_${crypto.randomUUID().replace(/-/g, '')}`;
         const session = (await lightFetch(env, 'POST', '/v1/checkout_sessions', {
           receive: { currency: 'USDC', amount: String(Math.round(amountUsd * 1e6)) },
           reference,
         })) as { id: string; client_secret: string };
         await env.KV.put(`session:${session.id}`, JSON.stringify({ uid, amountUsd, reference }), { expirationTtl: 60 * 60 * 24 * 30 });
+        await env.KV.put(`ref:${reference}`, uid, { expirationTtl: 60 * 60 * 24 * 30 });
         res = json({ id: session.id, clientSecret: session.client_secret });
       } else if (req.method === 'GET' && p.startsWith('/checkout/view/')) {
         res = json(await lightPublic(env, 'GET', `/v1/checkout/${encodeURIComponent(p.split('/').pop()!)}`));
@@ -160,7 +162,8 @@ async function handleWebhook(body: any, env: Env) {
   const session = (await lightFetch(env, 'GET', `/v1/checkout_sessions/${encodeURIComponent(id)}`)) as any;
   if (session?.status !== 'completed') return;
   const meta = await env.KV.get(`session:${id}`);
-  const uid = meta ? JSON.parse(meta).uid : String(session?.reference ?? '').split(':')[0];
+  const ref = String(session?.reference ?? '');
+  const uid = meta ? JSON.parse(meta).uid : ((await env.KV.get(`ref:${ref}`)) ?? (ref.includes(':') ? ref.split(':')[0] : ''));
   if (!uid) return;
   const micro = Number(session?.receive?.amount ?? 0);
   const prev = Number((await env.KV.get(`bal:${uid}`)) ?? '0');
