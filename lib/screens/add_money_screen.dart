@@ -827,19 +827,19 @@ class _OwnWalletCard extends StatelessWidget {
                         const Text('From Binance, Coinbase or any wallet. Choose the Base network.', textAlign: TextAlign.center, style: TextStyle(color: PColors.slate)),
                         const SizedBox(height: 16),
                         QrImageView(
-                          data: addr!,
+                          data: addr,
                           size: 200,
                           eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: PColors.navy),
                           dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle, color: PColors.navy),
                         ),
                         const SizedBox(height: 12),
-                        SelectableText(_AddMoneyScreenState._chunk(addr!), textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, height: 1.5)),
+                        SelectableText(_AddMoneyScreenState._chunk(addr), textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, height: 1.5)),
                         const SizedBox(height: 12),
                         SizedBox(
                           width: double.infinity,
                           child: FilledButton.icon(
                             onPressed: () {
-                              Clipboard.setData(ClipboardData(text: addr!));
+                              Clipboard.setData(ClipboardData(text: addr));
                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Wallet address copied')));
                             },
                             icon: const Icon(Icons.copy_rounded, size: 18),

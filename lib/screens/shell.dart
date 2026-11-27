@@ -30,7 +30,7 @@ class _ShellState extends State<Shell> {
   @override
   Widget build(BuildContext context) {
     final wide = MediaQuery.sizeOf(context).width >= 900;
-    final pages = const [HomeScreen(), MarketsScreen(), PotsScreen(), WalletScreen(), ProfileScreen()];
+    const pages = [HomeScreen(), MarketsScreen(), PotsScreen(), WalletScreen(), ProfileScreen()];
     final body = IndexedStack(index: _i, children: pages);
     if (wide) {
       return Scaffold(

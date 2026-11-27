@@ -397,12 +397,12 @@ class _AmbitionCard extends StatelessWidget {
 class _LearnCard extends StatelessWidget {
   const _LearnCard();
   @override
-  Widget build(BuildContext context) => PCard(
+  Widget build(BuildContext context) => const PCard(
         color: PColors.cream,
         child: Row(children: [
-          const PotfolioMark(size: 44, background: PColors.cream),
-          const SizedBox(width: 14),
-          const Expanded(
+          PotfolioMark(size: 44, background: PColors.cream),
+          SizedBox(width: 14),
+          Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text('What do you actually own?', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
               SizedBox(height: 4),

@@ -154,9 +154,9 @@ class _AmbitionScreenState extends State<AmbitionScreen> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
                   Expanded(child: Text('${sc.name} path', style: const TextStyle(fontWeight: FontWeight.w700))),
-                  _Legend(color: PColors.blue, label: 'Projected value'),
+                  const _Legend(color: PColors.blue, label: 'Projected value'),
                   const SizedBox(width: 12),
-                  _Legend(color: PColors.clay, label: 'You put in'),
+                  const _Legend(color: PColors.clay, label: 'You put in'),
                 ]),
                 const SizedBox(height: 12),
                 SizedBox(
