@@ -1,6 +1,6 @@
 import type { Env } from './index';
 
-type Req = { goal: string; amount: number; universe: { symbol: string; name: string; sector: string }[] };
+type Req = { goal: string; amount: number; context?: string; universe: { symbol: string; name: string; sector: string }[] };
 
 const SYSTEM = `You are the Potfolio Guardian, an educational assistant that builds example stock portfolios.
 Rules:
@@ -17,7 +17,7 @@ export async function runGuardian(req: Req, env: Env) {
   const universe = (req.universe ?? []).slice(0, 60);
   const symbols = new Set(universe.map((u) => u.symbol));
   const prompt = `Goal: ${req.goal}. Amount: $${Number(req.amount) || 0}.
-Universe (symbol | name | sector):
+${req.context ? `Investor context: ${String(req.context).slice(0, 400)}. Explain picks in light of this ambition and horizon.\n` : ''}Universe (symbol | name | sector):
 ${universe.map((u) => `${u.symbol} | ${u.name} | ${u.sector}`).join('\n')}`;
 
   for (let attempt = 0; attempt < 2; attempt++) {

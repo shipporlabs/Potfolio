@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../config.dart';
 import '../models.dart';
 import '../state/app_state.dart';
 import '../targets.dart';
@@ -12,6 +14,7 @@ import '../widgets/motion.dart';
 import '../widgets/stock_widgets.dart';
 import 'add_money_screen.dart';
 import 'share_pot_sheet.dart';
+import 'trade_sheet.dart';
 
 class PotDetailScreen extends StatelessWidget {
   final Pot pot;
@@ -34,6 +37,24 @@ class PotDetailScreen extends StatelessWidget {
         PopupMenuButton<String>(
           tooltip: 'More',
           onSelected: (k) async {
+            if (k == 'sell') {
+              final ok = await showDialog<bool>(
+                context: context,
+                builder: (c) => AlertDialog(
+                  title: const Text('Sell this pot?'),
+                  content: const Text('This sells the stocks this pot bought and returns USDC to your wallet. Prices may have moved since you bought.'),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Keep')),
+                    FilledButton(onPressed: () => Navigator.pop(c, true), child: const Text('Sell')),
+                  ],
+                ),
+              );
+              if (ok == true && context.mounted) {
+                await runTrade<Pot>(context, 'Selling ${p.name}', (step) => s.sellPot(p, onStep: step),
+                    done: (r) => 'Sold. The USDC is back in your wallet.', hashes: (r) => r.trades.where((t) => t.side == 'sell').map((t) => t.hash).toList().reversed.toList());
+              }
+              return;
+            }
             if (k != 'delete') return;
             final ok = await showDialog<bool>(
               context: context,
@@ -51,7 +72,10 @@ class PotDetailScreen extends StatelessWidget {
               if (context.mounted) Navigator.of(context).pop();
             }
           },
-          itemBuilder: (_) => const [PopupMenuItem(value: 'delete', child: Text('Delete pot'))],
+          itemBuilder: (_) => [
+            if (s.canTrade && p.units.isNotEmpty) const PopupMenuItem(value: 'sell', child: Text('Sell pot')),
+            const PopupMenuItem(value: 'delete', child: Text('Delete pot')),
+          ],
         ),
       ]),
       body: Center(
@@ -140,7 +164,14 @@ class PotDetailScreen extends StatelessWidget {
                         const Icon(Icons.south_west_rounded, size: 18, color: PColors.gain),
                         const SizedBox(width: 10),
                         Expanded(child: Text(DateFormat('EEE d MMM, HH:mm').format(c.at))),
-                        Text('+${money(c.amount)}', style: const TextStyle(fontWeight: FontWeight.w700)),
+                        Text('${c.amount >= 0 ? '+' : '−'}${money(c.amount.abs())}', style: const TextStyle(fontWeight: FontWeight.w700)),
+                        if (c.onchain)
+                          IconButton(
+                            tooltip: 'View on Basescan',
+                            visualDensity: VisualDensity.compact,
+                            onPressed: () => launchUrl(Uri.parse('${AppConfig.explorer}/tx/${c.trades.last.hash}'), mode: LaunchMode.externalApplication),
+                            icon: const Icon(Icons.open_in_new_rounded, size: 18, color: PColors.blue),
+                          ),
                       ]),
                     ),
                   Padding(
@@ -162,7 +193,10 @@ class PotDetailScreen extends StatelessWidget {
                 const Icon(Icons.verified_outlined, color: PColors.blue),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(p.txHash == null ? 'Not yet recorded on Base. This unlocks when the pot contract is deployed.' : 'Recorded on Base · ${p.txHash!.substring(0, 10)}…',
+                  child: Text(
+                      p.trades.isNotEmpty
+                          ? '${p.trades.length} ${p.trades.length == 1 ? 'trade' : 'trades'} on Base. Every buy and sell has a public transaction you can check.'
+                          : (s.canTrade ? 'Nothing bought yet. Add money to this pot to buy its stocks on Base.' : 'This is a plan. Trades happen on Base mainnet.'),
                       style: const TextStyle(fontSize: 13, height: 1.4)),
                 ),
               ]),
@@ -293,7 +327,7 @@ Future<void> showAddDeposit(BuildContext context, Pot pot) async {
     await s.refreshBalances();
   } catch (_) {}
   if (!context.mounted) return;
-  final free = s.available;
+  final free = s.canTrade ? (s.usdc ?? 0) : s.available;
   final plan = pot.plan();
   final planned = plan?.perPeriod ?? 0;
   final suggested = free >= 1 ? (planned < free ? planned : free.floorToDouble()) : 0.0;
@@ -387,6 +421,12 @@ Future<void> showAddDeposit(BuildContext context, Pot pot) async {
     ),
   );
   if (added == null || !context.mounted) return;
+  if (s.canTrade) {
+    if (!await ensureEligible(context) || !context.mounted) return;
+    await runTrade<Pot>(context, 'Investing in ${pot.name}', (step) => s.investInPot(pot, added, onStep: step),
+        done: (r) => '${money(added)} invested in ${pot.name}.', hashes: (r) => r.contributions.last.trades.map((t) => t.hash).toList());
+    return;
+  }
   try {
     await s.addContribution(pot, added);
     if (context.mounted) {

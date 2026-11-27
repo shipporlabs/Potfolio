@@ -12,13 +12,16 @@
  *  POST /checkout/pay/:secret            proxy Light public checkout pay
  *  POST /webhooks/light                  credit balances on checkout_session.completed
  *  GET  /balance             (auth)      USDC credited to the signed-in user
+ *  GET  /trade/quote                     0x quote to buy/sell a tokenized stock with USDC (Base mainnet)
+ *  POST /gas/topup           (auth)      tiny ETH top-up so USDC-only wallets can pay network fees
  */
 import { verifyFirebaseToken } from './auth';
 import { lightFetch, lightPublic } from './light';
 import { getStocks, getHistory } from './stocks';
 import { runGuardian } from './guardian';
+import { tradeQuote, gasTopup, TradeError, type TradeEnv } from './trade';
 
-export interface Env {
+export interface Env extends TradeEnv {
   AI: Ai;
   KV: KVNamespace;
   FIREBASE_PROJECT_ID: string;
@@ -184,6 +187,11 @@ export default {
         const uid = await requireUser(req, env);
         const micro = Number((await env.KV.get(`bal:${uid}`)) ?? '0');
         res = json({ usdc: micro / 1e6 });
+      } else if (req.method === 'GET' && p === '/trade/quote') {
+        res = json(await tradeQuote(url, env), 200, { 'cache-control': 'no-store' });
+      } else if (req.method === 'POST' && p === '/gas/topup') {
+        const uid = await requireUser(req, env);
+        res = json(await gasTopup(uid, await req.json(), env));
       } else if (p === '/' || p === '/health') {
         res = json({ ok: true, service: 'potfolio-api' });
       } else {
@@ -192,7 +200,7 @@ export default {
       Object.entries(c).forEach(([k, v]) => res.headers.set(k, v));
       return res;
     } catch (e) {
-      const status = e instanceof HttpError ? e.status : 500;
+      const status = e instanceof HttpError || e instanceof TradeError ? e.status : 500;
       const message = e instanceof Error ? e.message : 'Server error';
       return json({ error: message }, status, c);
     }

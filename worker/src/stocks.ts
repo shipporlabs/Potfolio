@@ -5,7 +5,7 @@ import EU from '../data/stocks_eu.json';
 import UK from '../data/stocks_uk.json';
 import KE from '../data/stocks_ke.json';
 
-type Stock = { symbol: string; name: string; exchange: string; sector: string; domain?: string; td?: string; tdExchange?: string; contract?: string; price?: number; changePct?: number; priceAt?: string; logo?: string };
+type Stock = { symbol: string; name: string; exchange: string; sector: string; domain?: string; td?: string; tdExchange?: string; contract?: string; decimals?: number; price?: number; changePct?: number; priceAt?: string; logo?: string };
 
 const LISTS: Record<string, Stock[]> = { US: US as Stock[], NG: NG as Stock[], EU: EU as Stock[], UK: UK as Stock[], KE: KE as Stock[] };
 const TOKENIZED = 'https://api.coinbase.com/v1/tokenized-stocks';
@@ -50,14 +50,14 @@ async function mergeTokenized(base: Stock[]): Promise<Stock[]> {
       const rec = by.get(norm(s.symbol));
       if (!rec) return s;
       const nav = Number(typeof rec.nav_price === 'object' ? rec.nav_price?.value : rec.nav_price);
-      return { ...s, contract: String(rec.contract_address ?? '').toLowerCase(), price: nav > 0 ? nav : s.price, priceAt: rec.nav_price_updated_at, logo: `${TOKENIZED}/images/${rec.symbol ?? s.symbol}` };
+      return { ...s, contract: String(rec.contract_address ?? '').toLowerCase(), decimals: Number(rec.decimals ?? 18), price: nav > 0 ? nav : s.price, priceAt: rec.nav_price_updated_at, logo: `${TOKENIZED}/images/${rec.symbol ?? s.symbol}` };
     });
     // Tokenized stocks not in our curated list still appear, so the list stays complete.
     const known = new Set(base.map((s) => norm(s.symbol)));
     for (const [t, rec] of by) {
       if (known.has(t) || !rec.contract_address) continue;
       const nav = Number(typeof rec.nav_price === 'object' ? rec.nav_price?.value : rec.nav_price);
-      merged.push({ symbol: t, name: String(rec.name ?? t), exchange: 'US', sector: 'other', contract: String(rec.contract_address).toLowerCase(), price: nav > 0 ? nav : undefined, priceAt: rec.nav_price_updated_at, logo: `${TOKENIZED}/images/${rec.symbol ?? t}` });
+      merged.push({ symbol: t, name: String(rec.name ?? t), exchange: 'US', sector: 'other', contract: String(rec.contract_address).toLowerCase(), decimals: Number(rec.decimals ?? 18), price: nav > 0 ? nav : undefined, priceAt: rec.nav_price_updated_at, logo: `${TOKENIZED}/images/${rec.symbol ?? t}` });
     }
     return merged;
   } catch {

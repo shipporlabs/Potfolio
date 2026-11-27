@@ -20,3 +20,10 @@ ALLOWED_ORIGINS = "*"
 #   npx wrangler secret put LIGHT_API_KEY       # lk_test_...
 #   npx wrangler secret put LIGHT_SIGNING_KEY   # contents of light-signing.key (PEM)
 #   npx wrangler secret put TWELVE_DATA_KEY     # optional, for non-US prices and charts
+
+# Real trading on Base mainnet (tokenized stocks <-> USDC via 0x):
+#   npx wrangler secret put ZEROX_API_KEY       # free key from https://dashboard.0x.org
+#   npx wrangler secret put GAS_WALLET_KEY      # 0x… private key of a NEW wallet holding ~$10-20 of ETH on Base (pays users' network fees)
+# Optional Potfolio fee on each trade (taken in USDC): set in [vars] or as secrets
+#   SWAP_FEE_BPS = "25"        # 0.25%
+#   FEE_RECIPIENT = "0x…"      # your treasury address

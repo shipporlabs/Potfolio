@@ -11,7 +11,7 @@ class AppConfig {
   static const network = String.fromEnvironment('BASE_NETWORK', defaultValue: 'sepolia');
 
   /// Public website, used for share links (https://<site>/p/<id>).
-  static const siteUrl = String.fromEnvironment('SITE_URL', defaultValue: 'https://usepotfolio.web.app');
+  static const siteUrl = String.fromEnvironment('SITE_URL', defaultValue: 'https://potfolio.xyz');
 
   static bool get hasWorker => workerUrl.isNotEmpty;
   static bool get isMainnet => network == 'mainnet';
@@ -24,6 +24,11 @@ class AppConfig {
   static String get usdc => isMainnet
       ? '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
       : '0x036CbD53842c5426634e7929541eC2318f3dCF7e';
+
+  static int get chainId => isMainnet ? 8453 : 84532;
+
+  /// Real buying and selling only exists on Base mainnet (tokenized stocks live there).
+  static bool get tradingEnabled => isMainnet && hasWorker;
 
   static const tokenizedStocksApi = 'https://api.coinbase.com/v1/tokenized-stocks';
 }

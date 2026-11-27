@@ -14,13 +14,27 @@ import '../widgets/brand.dart';
 import '../widgets/motion.dart';
 import '../widgets/stock_widgets.dart';
 import 'pot_detail_screen.dart';
+import 'trade_sheet.dart';
 
 /// Four calm steps, PiggyVest style:
 /// what you're saving for → target, date and how often → Guardian mix → review.
+/// Values handed over from "What will it take?".
+class PotPrefill {
+  final String name;
+  final double target;
+  final DateTime date;
+  final Frequency frequency;
+  final double start;
+  final Goal goal;
+  final String context; // brief for the AI Guardian
+  const PotPrefill({required this.name, required this.target, required this.date, required this.frequency, required this.start, required this.goal, required this.context});
+}
+
 class CreatePotScreen extends StatefulWidget {
   final Stock? preselect;
   final GoalTemplate? template;
-  const CreatePotScreen({super.key, this.preselect, this.template});
+  final PotPrefill? prefill;
+  const CreatePotScreen({super.key, this.preselect, this.template, this.prefill});
   @override
   State<CreatePotScreen> createState() => _CreatePotScreenState();
 }
@@ -47,7 +61,18 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.template != null) {
+    final pf = widget.prefill;
+    if (pf != null) {
+      _tpl = templateById('custom')!;
+      _goal = pf.goal;
+      _target = pf.target.roundToDouble();
+      _date = pf.date;
+      _freq = pf.frequency;
+      _start = pf.start;
+      _name.text = pf.name;
+      _syncFields();
+      _step = 1;
+    } else if (widget.template != null) {
       _pick(widget.template!, silent: true);
       _step = 1;
     } else {
@@ -62,7 +87,10 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
     });
   }
 
-  double get _available => context.read<AppState>().available;
+  double get _available {
+    final s = context.read<AppState>();
+    return s.canTrade ? (s.usdc ?? 0) : s.available;
+  }
 
   /// About 5% of the target, but never more than the user has free.
   double _suggestStart(GoalTemplate t) {
@@ -137,7 +165,7 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
     });
     final s = context.read<AppState>();
     _universe = await s.stocks.list(Market.us);
-    final p = await s.guardian.propose(_goal, _start > 0 ? _start : _target, _universe);
+    final p = await s.guardian.propose(_goal, _start > 0 ? _start : _target, _universe, context: widget.prefill?.context);
     var allocs = p.allocations;
     final pre = widget.preselect;
     if (pre != null && !allocs.any((a) => a.symbol == pre.symbol) && allocs.isNotEmpty) {
@@ -166,11 +194,17 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
   Future<void> _save() async {
     setState(() => _busy = true);
     final s = context.read<AppState>();
+    // With real trading the first deposit is bought onchain right after the pot is saved.
+    final buyNow = s.canTrade && _start > 0;
+    if (buyNow && !await ensureEligible(context)) {
+      setState(() => _busy = false);
+      return;
+    }
     final pot = Pot(
       id: '',
       name: _potName,
       goal: _goal,
-      amount: _start,
+      amount: buyNow ? 0 : _start,
       allocations: _allocs,
       risks: _risks,
       createdAt: DateTime.now(),
@@ -180,8 +214,14 @@ class _CreatePotScreenState extends State<CreatePotScreen> {
       templateId: _tpl.id,
     );
     try {
-      final saved = await s.savePot(pot);
+      var saved = await s.savePot(pot);
       if (!mounted) return;
+      if (buyNow) {
+        final r = await runTrade<Pot>(context, 'Investing ${money(_start)}', (step) => s.investInPot(saved, _start, onStep: step),
+            done: (r) => 'Your pot is live on Base.', hashes: (r) => r.trades.map((t) => t.hash).toList());
+        if (r != null) saved = r;
+        if (!mounted) return;
+      }
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => PotDetailScreen(pot: saved, justCreated: true)));
     } catch (e) {
       if (mounted) {

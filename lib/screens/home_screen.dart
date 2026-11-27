@@ -9,6 +9,7 @@ import '../widgets/brand.dart';
 import '../widgets/motion.dart';
 import '../widgets/stock_widgets.dart';
 import 'add_money_screen.dart';
+import 'ambition_screen.dart';
 import 'create_pot_screen.dart';
 import 'pot_detail_screen.dart';
 import 'share_pot_sheet.dart';
@@ -57,6 +58,8 @@ class HomeScreen extends StatelessWidget {
               _Action(icon: Icons.travel_explore_rounded, label: 'Markets', onTap: () => Shell.goTo(context, 1)),
               _Action(icon: Icons.qr_code_rounded, label: 'Receive', onTap: () => Shell.goTo(context, 3)),
             ]),
+            const SizedBox(height: 12),
+            const _AmbitionCard(),
             const SizedBox(height: 12),
             const _ThingsToDo(),
             SectionTitle('Your pots', action: s.myPots.isEmpty ? null : 'See all', onAction: () => Shell.goTo(context, 2)),
@@ -355,6 +358,40 @@ class _ThingsToDo extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Entry to "What will it take?", the starting point of the app.
+class _AmbitionCard extends StatelessWidget {
+  const _AmbitionCard();
+  @override
+  Widget build(BuildContext context) => Material(
+        color: PColors.blue,
+        borderRadius: BorderRadius.circular(24),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(24),
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AmbitionScreen())),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(children: [
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('What will it take?', style: display(22, color: Colors.white, weight: FontWeight.w800)),
+                  const SizedBox(height: 4),
+                  const Text('Name an ambition, like \$100k in 10 years. See the monthly plan and the strategy behind it.',
+                      style: TextStyle(color: Color(0xFFDCE6FF), height: 1.4)),
+                ]),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                child: const Icon(Icons.arrow_forward_rounded, color: PColors.blue),
+              ),
+            ]),
+          ),
+        ),
+      );
 }
 
 class _LearnCard extends StatelessWidget {

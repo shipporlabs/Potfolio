@@ -12,6 +12,7 @@ import '../theme.dart';
 import '../widgets/brand.dart';
 import '../widgets/stock_widgets.dart';
 import 'create_pot_screen.dart';
+import 'trade_sheet.dart';
 
 class StockDetailScreen extends StatelessWidget {
   final Stock stock;
@@ -117,7 +118,53 @@ class StockDetailScreen extends StatelessWidget {
         if (stock.investable)
           const GuardianNote('A tokenized stock tracks a real share held by a custodian. It gives price exposure, not voting rights.', title: 'Good to know'),
         const SizedBox(height: 20),
-        if (stock.investable)
+        if (stock.investable && AppConfig.tradingEnabled) ...[
+          FutureBuilder<BigInt?>(
+            future: s.holding(stock),
+            builder: (context, snap) {
+              final held = snap.data ?? BigInt.zero;
+              final u = units(held, stock.decimals);
+              return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                if (held > BigInt.zero)
+                  PCard(
+                    child: Row(children: [
+                      const Icon(Icons.account_balance_wallet_outlined, color: PColors.blue),
+                      const SizedBox(width: 12),
+                      Expanded(child: Text('You hold ${fmtUnits(u)} ${stock.symbol}', style: const TextStyle(fontWeight: FontWeight.w700))),
+                      if (stock.price != null) Text('≈ ${money(u * stock.price!)}', style: const TextStyle(color: PColors.slate)),
+                    ]),
+                  ),
+                if (held > BigInt.zero) const SizedBox(height: 12),
+                Row(children: [
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: () => showTradeSheet(context, stock, buy: true),
+                      icon: const Icon(Icons.add_rounded),
+                      label: const Text('Buy'),
+                    ),
+                  ),
+                  if (held > BigInt.zero) ...[
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () => showTradeSheet(context, stock, buy: false),
+                        icon: const Icon(Icons.remove_rounded),
+                        label: const Text('Sell'),
+                        style: OutlinedButton.styleFrom(backgroundColor: Colors.white),
+                      ),
+                    ),
+                  ],
+                ]),
+                const SizedBox(height: 10),
+              ]);
+            },
+          ),
+          TextButton.icon(
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => CreatePotScreen(preselect: stock))),
+            icon: const Icon(Icons.auto_awesome_rounded),
+            label: const Text('Or build a pot with this stock'),
+          ),
+        ] else if (stock.investable)
           FilledButton.icon(
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => CreatePotScreen(preselect: stock))),
             icon: const Icon(Icons.auto_awesome_rounded),

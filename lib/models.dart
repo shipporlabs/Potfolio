@@ -46,6 +46,7 @@ class Stock {
   final String sector;
   final String? domain;
   final String? contract; // tokenized stock contract on Base (US only)
+  final int decimals; // token decimals (tokenized stocks are usually 18)
   final double? price;
   final double? changePct;
   final DateTime? priceAt;
@@ -59,6 +60,7 @@ class Stock {
     this.sector = 'other',
     this.domain,
     this.contract,
+    this.decimals = 18,
     this.price,
     this.changePct,
     this.priceAt,
@@ -89,6 +91,7 @@ class Stock {
         sector: sector,
         domain: domain,
         contract: contract ?? this.contract,
+        decimals: decimals,
         price: price ?? this.price,
         changePct: changePct ?? this.changePct,
         priceAt: priceAt ?? this.priceAt,
@@ -103,6 +106,7 @@ class Stock {
         sector: (j['sector'] ?? 'other').toString(),
         domain: j['domain'] as String?,
         contract: (j['contract'] as String?)?.toLowerCase(),
+        decimals: (_d(j['decimals']) ?? 18).toInt(),
         price: _d(j['price']),
         changePct: _d(j['changePct']),
         priceAt: j['priceAt'] != null ? DateTime.tryParse(j['priceAt'].toString()) : null,
@@ -156,14 +160,41 @@ class GuardianProposal {
   const GuardianProposal({required this.summary, required this.allocations, required this.risks, this.fromAi = false});
 }
 
-/// A deposit added to a pot after it was created.
+/// One onchain swap made for a pot.
+class PotTrade {
+  final String symbol;
+  final String token; // contract address
+  final String side; // buy | sell
+  final String units; // raw token amount (BigInt as string) bought or sold
+  final double usd; // USDC spent (buy) or received (sell)
+  final String hash; // Base transaction hash
+  const PotTrade({required this.symbol, required this.token, required this.side, required this.units, required this.usd, required this.hash});
+  BigInt get raw => BigInt.tryParse(units) ?? BigInt.zero;
+  Map<String, dynamic> toJson() => {'symbol': symbol, 'token': token, 'side': side, 'units': units, 'usd': usd, 'hash': hash};
+  factory PotTrade.fromJson(Map<String, dynamic> j) => PotTrade(
+        symbol: '${j['symbol'] ?? ''}',
+        token: '${j['token'] ?? ''}',
+        side: '${j['side'] ?? 'buy'}',
+        units: '${j['units'] ?? '0'}',
+        usd: _d(j['usd']) ?? 0,
+        hash: '${j['hash'] ?? ''}',
+      );
+}
+
+/// A deposit (or, if negative, a withdrawal) for a pot. When [trades] is not
+/// empty the money really moved onchain; otherwise it is a planned amount only.
 class Contribution {
   final double amount; // USD
   final DateTime at;
-  const Contribution(this.amount, this.at);
-  Map<String, dynamic> toJson() => {'amount': amount, 'at': at.toIso8601String()};
-  factory Contribution.fromJson(Map<String, dynamic> j) =>
-      Contribution(_d(j['amount']) ?? 0, DateTime.tryParse('${j['at'] ?? ''}') ?? DateTime.now());
+  final List<PotTrade> trades;
+  const Contribution(this.amount, this.at, {this.trades = const []});
+  bool get onchain => trades.isNotEmpty;
+  Map<String, dynamic> toJson() => {'amount': amount, 'at': at.toIso8601String(), if (trades.isNotEmpty) 'trades': trades.map((t) => t.toJson()).toList()};
+  factory Contribution.fromJson(Map<String, dynamic> j) => Contribution(
+        _d(j['amount']) ?? 0,
+        DateTime.tryParse('${j['at'] ?? ''}') ?? DateTime.now(),
+        trades: ((j['trades'] as List?) ?? []).map((e) => PotTrade.fromJson(Map<String, dynamic>.from(e as Map))).toList(),
+      );
 }
 
 class Pot {
@@ -202,6 +233,23 @@ class Pot {
 
   /// Everything the saver has put in: first deposit plus later deposits.
   double get invested => amount + contributions.fold<double>(0, (s, c) => s + c.amount);
+
+  /// Money planned for this pot that hasn't been invested onchain.
+  double get paperAmount => amount + contributions.where((c) => !c.onchain).fold<double>(0, (s, c) => s + c.amount);
+
+  /// Net raw units held per token from this pot's onchain trades.
+  Map<String, BigInt> get units {
+    final m = <String, BigInt>{};
+    for (final c in contributions) {
+      for (final t in c.trades) {
+        m[t.token] = (m[t.token] ?? BigInt.zero) + (t.side == 'sell' ? -t.raw : t.raw);
+      }
+    }
+    m.removeWhere((_, v) => v <= BigInt.zero);
+    return m;
+  }
+
+  List<PotTrade> get trades => [for (final c in contributions) ...c.trades];
 
   TargetPlan? plan([DateTime? now]) => hasTarget
       ? TargetPlan(

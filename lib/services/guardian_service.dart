@@ -9,7 +9,7 @@ class GuardianService {
   final WorkerApi _api;
   GuardianService(this._api);
 
-  Future<GuardianProposal> propose(Goal goal, double amount, List<Stock> universe) async {
+  Future<GuardianProposal> propose(Goal goal, double amount, List<Stock> universe, {String? context}) async {
     final pool = universe.where((s) => s.investable).toList();
     final candidates = pool.length >= 4 ? pool : universe;
     if (AppConfig.hasWorker) {
@@ -17,6 +17,7 @@ class GuardianService {
         final j = await _api.post('/guardian', {
           'goal': goal.name,
           'amount': amount,
+          if (context != null) 'context': context,
           'universe': candidates.map((s) => {'symbol': s.symbol, 'name': s.name, 'sector': s.sector}).toList(),
         });
         final allocs = ((j['allocations'] as List?) ?? [])
