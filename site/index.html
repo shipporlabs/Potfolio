@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -9,368 +9,370 @@
 <meta property="og:title" content="Potfolio · Your ambition deserves an investment strategy">
 <meta property="og:description" content="Don’t just save towards what you want to buy. Build towards the wealth you want to create.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://potfolio.xyz">
 <link rel="icon" type="image/svg+xml" href="/assets/mark-tile.svg">
-<link rel="apple-touch-icon" href="/app/icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#0052FF;--mid:#4D86FF;--sky:#99B9FF;--navy:#0A1A3A;--clay:#D9653B;--cream:#FBF6EE;--mist:#F3F6FC;--line:#E3E8F2;--slate:#5B6475;--gain:#0B8A5C}
+:root{--navy:#0A1A3A;--blue:#0052FF;--mid:#4D86FF;--sky:#99B9FF;--clay:#D9653B;--sun:#FFC94A;--cream:#FBF6EE;--mist:#F3F6FC;--line:#E8E2D6;--slate:#5B6475;--gain:#0B8A5C}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:80px}
-body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--navy);background:#fff;-webkit-font-smoothing:antialiased}
-a{color:var(--blue)}
-img{max-width:100%}
-.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
-.display{font-family:'Inter Tight',Inter,sans-serif;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin:0}
-.eyebrow{margin:0;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
-.lead{margin:0;font-size:18px;line-height:1.6;color:var(--slate)}
-.sec{padding:112px 0}
-.btn{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 22px;border-radius:14px;font-weight:700;font-size:16px;text-decoration:none;border:0;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;font-family:inherit}
-.btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(10,26,58,.16)}
-.btn-primary{background:var(--blue);color:#fff}
-.btn-dark{background:var(--navy);color:#fff}
-.btn-light{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--line)}
-.btn small{display:block;font-size:11px;font-weight:500;opacity:.75;line-height:1}
-.btn span.two{display:flex;flex-direction:column;line-height:1.15;text-align:left}
-.pi{width:22px;height:22px;flex:none}
-.btn-dark[data-apk] .pi{color:#3DDC84}
-.partners{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:20px 56px}
-.partners a{display:flex;align-items:center;opacity:.9;transition:opacity .2s}
-.partners a:hover{opacity:1}
-.btnrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.card{background:#fff;border-radius:24px;box-shadow:inset 0 0 0 1px var(--line)}
-.lift{transition:transform .3s ease,box-shadow .3s ease}
-.lift:hover{transform:translateY(-6px);box-shadow:0 24px 48px rgba(10,26,58,.10),inset 0 0 0 1px var(--line)}
-/* header */
-header{position:sticky;top:0;z-index:30;background:rgba(251,246,238,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(10,26,58,.06)}
-.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.navlinks{display:flex;gap:32px}
-.navlinks a{color:var(--navy);text-decoration:none;font-weight:600;font-size:15px}
-.lockup{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy)}
-.lockup img{width:34px;height:34px}
-.word{font-family:'Inter Tight',sans-serif;font-weight:800;letter-spacing:-.045em;font-size:27px;line-height:1;white-space:nowrap}
-.donut{display:inline-block;width:.6em;height:.6em;vertical-align:-.04em;margin:0 .015em}
-/* hero */
-.hero{background:var(--cream);position:relative;overflow:hidden}
-.hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:64px;align-items:center;padding:80px 24px 96px}
-.h1{font-size:76px}
-.pill{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);font-size:14px;font-weight:600}
-.stack{display:flex}
-.stack .lg{width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #fff,inset 0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center;margin-left:-8px}
-.stack .lg:first-child{margin-left:0}
-.stack .lg img{width:56%;height:56%;object-fit:contain}
-.ring-bg{position:absolute;right:-260px;top:-200px;width:760px;height:760px;opacity:.5;animation:spin 60s linear infinite;pointer-events:none}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* widget */
-.widget{padding:24px;display:flex;flex-direction:column;gap:18px;box-shadow:0 1px 0 rgba(10,26,58,.04),0 30px 60px rgba(10,26,58,.10),inset 0 0 0 1px var(--line)}
-.wtop{display:flex;justify-content:space-between;align-items:center}
-.tag{font-size:11px;font-weight:600;color:var(--slate);background:var(--mist);padding:4px 9px;border-radius:99px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{height:40px;padding:0 16px;border:0;border-radius:999px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;background:var(--mist);color:var(--navy)}
-.chip[aria-checked="true"]{background:var(--navy);color:#fff}
-.bar{display:flex;gap:3px;height:10px}
-.bar span{border-radius:10px;transition:flex .45s ease}
-.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
-.row .lg{width:38px;height:38px;flex:none;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center}
-.row .lg img{width:56%;height:56%;object-fit:contain}
-.row .nm{flex:1;display:flex;flex-direction:column}
-.row b{font-size:15px}
-.row .tk{font-size:12px;color:var(--slate)}
-.row .pc{font-weight:700;font-variant-numeric:tabular-nums}
-.row .usd{width:56px;text-align:right;color:var(--slate);font-size:14px;font-variant-numeric:tabular-nums}
-.guard{display:flex;gap:12px;align-items:flex-start;background:#FFF4EE;border-radius:16px;padding:14px 16px;font-size:14px;line-height:1.45}
-/* marquee */
-.marquee{background:#fff;padding:36px 0 28px;border-bottom:1px solid var(--line);overflow:hidden}
-.track{display:flex;width:max-content;animation:marq 50s linear infinite}
-.track:hover{animation-play-state:paused}
-@keyframes marq{to{transform:translateX(-50%)}}
-.lchip{display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;margin-right:12px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);white-space:nowrap}
-.lchip .lg{width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center}
-.lchip .lg img{width:56%;height:56%}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--navy);background:var(--cream);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+img{display:block;max-width:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.d{font-family:'Inter Tight',Inter,sans-serif;font-weight:900;letter-spacing:-.045em;line-height:.95;margin:0}
+.eyebrow{margin:0;font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.lead{margin:0;font-size:19px;line-height:1.55;color:var(--slate)}
 .small{font-size:12px;color:var(--slate)}
-/* grids */
-.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
-.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center}
-.h2{font-size:50px}
-.step .ic{width:48px;height:48px;border-radius:14px;background:var(--mist);display:flex;align-items:center;justify-content:center}
-.growbar{display:flex;gap:4px;height:8px;margin-bottom:28px}
-.growbar span{flex:1;border-radius:8px}
-/* tour */
-.tour{background:var(--navy);color:#fff}
-.tabs{display:flex;flex-direction:column;gap:8px}
-.tab{display:flex;align-items:center;gap:14px;min-height:56px;padding:12px 18px;border:0;border-radius:16px;cursor:pointer;font-family:inherit;text-align:left;background:rgba(255,255,255,.06);color:#A8B6D4;font-size:17px;font-weight:600}
-.tab[aria-selected="true"]{background:#fff;color:var(--navy)}
-.tab .n{font-family:'Inter Tight';font-size:14px;font-weight:800;opacity:.6}
-.panel{background:#fff;color:var(--navy);border-radius:24px;padding:24px;box-shadow:0 30px 60px rgba(0,0,0,.25);width:100%;max-width:440px}
-.panel[hidden]{display:none}
-.kv{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
-.kv span:first-child{color:var(--slate)}
-/* pots */
-.pot{padding:26px;display:flex;flex-direction:column;gap:16px}
-/* faq */
-details{background:#fff;border-radius:20px;box-shadow:inset 0 0 0 1px var(--line);padding:0 22px}
-summary{list-style:none;cursor:pointer;padding:20px 0;font-size:18px;font-weight:700;display:flex;justify-content:space-between;gap:16px}
-summary::-webkit-details-marker{display:none}
-summary::after{content:'+';font-size:24px;color:var(--blue);transition:transform .25s}
-details[open] summary::after{transform:rotate(45deg)}
-details p{margin:0 0 20px;font-size:17px;line-height:1.6;color:var(--slate)}
-/* get */
-.get{background:var(--navy);color:#fff;position:relative;overflow:hidden}
-.ios-note{display:none;margin-top:14px;background:rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.55;color:#DCE4F5;max-width:560px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:58px;padding:0 24px;border-radius:999px;font-weight:800;font-size:16px;text-decoration:none;border:0;cursor:pointer;font-family:inherit;transition:transform .2s ease,box-shadow .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn .pi{width:22px;height:22px}
+.btn small{display:block;font-size:11px;font-weight:600;opacity:.75;line-height:1;text-align:left}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 10px 24px rgba(0,82,255,.28)}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-white{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy)}
+.btn-navy[data-apk] .pi{color:#3DDC84}
+
+/* nav */
+.nav{position:fixed;top:14px;left:0;right:0;z-index:50}
+.nav .in{max-width:1180px;margin:0 auto;padding:0 14px}
+.nav .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border-radius:20px;padding:10px 10px 10px 18px;box-shadow:0 8px 30px rgba(10,26,58,.08)}
+.lockup{display:flex;align-items:center;gap:10px;text-decoration:none}
+.lockup img{width:34px;height:34px}
+.word{font-family:'Inter Tight',sans-serif;font-weight:900;letter-spacing:-.05em;font-size:26px;line-height:1;white-space:nowrap}
+.donut{display:inline-block;width:.6em;height:.6em;vertical-align:-.04em;margin:0 .02em}
+.navlinks{display:flex;gap:26px}
+.navlinks a{text-decoration:none;font-weight:700;font-size:15px}
+.navlinks a:hover{color:var(--blue)}
+
+/* hero */
+.hero{padding:110px 0 30px}
+.blocks{display:flex;flex-direction:column;gap:12px}
+.blk{display:flex;align-items:center;justify-content:center;border-radius:22px;min-height:clamp(78px,11vw,150px);padding:0 18px;opacity:0;transform:translateY(30px) scale(.98);animation:up .7s cubic-bezier(.2,.8,.2,1) forwards}
+.blk .d{font-size:clamp(46px,9.4vw,132px);text-align:center}
+.blk:nth-child(1){background:var(--navy);color:#fff;animation-delay:.05s}
+.blk:nth-child(2){background:var(--blue);color:#fff;animation-delay:.15s}
+.blk:nth-child(3){background:var(--sky);color:var(--navy);animation-delay:.25s}
+.blk:nth-child(4){background:var(--sun);color:var(--navy);animation-delay:.35s}
+.row2{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:stretch}
+.row2 .side{background:var(--clay);color:#fff;border-radius:22px;display:flex;align-items:center;justify-content:center;padding:0 clamp(16px,3vw,44px)}
+.row2 .side .d{font-size:clamp(46px,9.4vw,132px)}
+@keyframes up{to{opacity:1;transform:none}}
+.hero-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px;margin-top:30px}
+.hero-foot .lead{max-width:520px;color:var(--navy);opacity:.8}
+.ctas{display:flex;flex-wrap:wrap;gap:10px}
+.ios-note{display:none;margin-top:14px;background:#fff;border-radius:16px;padding:14px 16px;font-size:14px;line-height:1.55;max-width:560px;box-shadow:inset 0 0 0 1px var(--line)}
 .ios-note.show{display:block}
-footer{border-top:1px solid var(--line)}
-/* reveal */
-@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-@supports (animation-timeline: view()){.reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 26%}}
-@media (max-width:960px){
-.hero-grid,.split{grid-template-columns:minmax(0,1fr)}
-.grid3{grid-template-columns:minmax(0,1fr)}
-.navlinks,.hide-sm{display:none}
-.h1{font-size:46px}.h2{font-size:34px}.sec{padding:76px 0}
-.tabs{flex-direction:row;overflow-x:auto;padding-bottom:6px}
-.tab{flex:none}
+
+/* ticker */
+.ticker{margin-top:44px}
+.ticker p{margin:0 0 14px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+.track{display:flex;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.belt{display:flex;gap:10px;padding-right:10px;flex-shrink:0;animation:belt 38s linear infinite}
+.tk{display:flex;align-items:center;gap:10px;background:#fff;border-radius:16px;padding:10px 16px 10px 10px;white-space:nowrap;box-shadow:inset 0 0 0 1px var(--line)}
+.tk span.l{width:34px;height:34px;border-radius:10px;background:var(--mist);display:flex;align-items:center;justify-content:center}
+.tk span.l img{width:22px;height:22px}
+.tk b{font-size:15px}
+.tk i{font-style:normal;font-size:13px;font-weight:700;color:var(--gain)}
+@keyframes belt{to{transform:translateX(-100%)}}
+.scroll-cue{display:flex;justify-content:center;margin-top:34px}
+.scroll-cue a{display:inline-flex;gap:8px;align-items:center;background:#fff;border-radius:999px;padding:10px 18px;font-weight:800;font-size:13px;letter-spacing:.12em;text-decoration:none;box-shadow:inset 0 0 0 1px var(--line)}
+.scroll-cue a span{animation:bob 1.4s ease-in-out infinite;display:inline-block}
+@keyframes bob{50%{transform:translateY(4px)}}
+
+/* stacked feature cards */
+.deck{padding:60px 0 40px}
+.deck-head{margin-bottom:28px}
+.fcard{position:sticky;border-radius:34px;min-height:min(78vh,620px);padding:clamp(26px,4vw,56px);display:grid;grid-template-columns:1.05fr 1fr;gap:36px;align-items:center;margin-bottom:26px;box-shadow:0 -10px 40px rgba(10,26,58,.10);overflow:hidden}
+.fcard:nth-of-type(1){top:96px;background:var(--blue);color:#fff}
+.fcard:nth-of-type(2){top:112px;background:var(--navy);color:#fff}
+.fcard:nth-of-type(3){top:128px;background:var(--clay);color:#fff}
+.fcard:nth-of-type(4){top:144px;background:var(--sky);color:var(--navy)}
+.fcard .num{font-family:'Inter Tight',Inter,sans-serif;font-weight:900;font-size:15px;letter-spacing:.14em;opacity:.7}
+.fcard h3{font-size:clamp(44px,6.4vw,92px);text-transform:uppercase;margin:16px 0 18px}
+.fcard p{margin:0;font-size:18px;line-height:1.55;opacity:.9;max-width:460px}
+.mock{background:#fff;color:var(--navy);border-radius:26px;padding:22px;box-shadow:0 30px 60px rgba(0,0,0,.18);transform:rotate(2deg)}
+.fcard:nth-of-type(even) .mock{transform:rotate(-2deg)}
+.mock .k{font-size:12px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.1em}
+.pbar{height:12px;border-radius:12px;background:var(--mist);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:12px;background:var(--blue)}
+.al{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid #EEF1F7}
+.al .sw{width:12px;height:12px;border-radius:4px}
+.al b{font-size:15px}
+.al span{font-size:13px;color:var(--slate);flex:1}
+.receipt{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:var(--mist);margin-top:10px}
+.receipt .ok{width:34px;height:34px;border-radius:50%;background:#E8F8EF;color:var(--gain);display:flex;align-items:center;justify-content:center;font-weight:900}
+
+/* calculator */
+#take{padding:90px 0}
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{background:#fff;border-radius:30px;padding:28px}
+.panel.dark{background:var(--navy);color:#fff}
+.chip{height:40px;padding:0 16px;border:0;border-radius:999px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;background:var(--cream);color:var(--navy)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.sc{border-radius:20px;padding:16px;background:rgba(255,255,255,.08)}
+.sc.on{background:var(--sun);color:var(--navy)}
+
+/* band */
+.band{padding:24px 0 80px}
+.band .in{background:var(--sun);border-radius:34px;padding:clamp(28px,5vw,64px);display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center}
+.band h2{font-size:clamp(40px,5.6vw,80px)}
+.pts{display:flex;flex-direction:column;gap:12px}
+.pt{display:flex;gap:14px;align-items:flex-start;background:rgba(255,255,255,.55);border-radius:20px;padding:16px 18px}
+.pt .ic{width:42px;height:42px;border-radius:14px;background:var(--navy);color:var(--sun);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pt b{display:block;font-size:17px;margin-bottom:2px}
+.pt span{font-size:14px;line-height:1.45}
+
+/* steps */
+.steps{padding:40px 0 90px}
+.rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 20px 18px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.sp{scroll-snap-align:start;flex:0 0 min(78vw,330px);min-height:420px;border-radius:30px;padding:26px;display:flex;flex-direction:column;justify-content:space-between}
+.sp:nth-child(1){background:var(--navy);color:#fff}
+.sp:nth-child(2){background:var(--clay);color:#fff}
+.sp:nth-child(3){background:var(--blue);color:#fff}
+.sp:nth-child(4){background:var(--sky)}
+.sp:nth-child(5){background:var(--sun)}
+.sp .n{font-family:'Inter Tight',Inter,sans-serif;font-weight:900;font-size:68px;line-height:1;opacity:.9}
+.sp h4{font-family:'Inter Tight',Inter,sans-serif;font-weight:900;font-size:32px;letter-spacing:-.03em;line-height:1;margin:0 0 10px;text-transform:uppercase}
+.sp p{margin:0;font-size:15px;line-height:1.5;opacity:.9}
+
+/* partners + faq + cta */
+.partners{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(28px,6vw,72px);background:#fff;border-radius:30px;padding:30px}
+.faq{padding:90px 0}
+.faq details{background:#fff;border-radius:22px;padding:0 24px;margin-bottom:12px}
+summary{list-style:none;cursor:pointer;padding:22px 0;font-size:19px;font-weight:800;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'+';width:30px;height:30px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:transform .25s}
+details[open] summary::after{transform:rotate(45deg);background:var(--sun)}
+details p{margin:0 0 22px;font-size:17px;line-height:1.6;color:var(--slate)}
+.cta{padding:0 0 60px}
+.cta .in{background:var(--navy);color:#fff;border-radius:38px;padding:clamp(34px,6vw,80px);text-align:center;position:relative;overflow:hidden}
+.cta h2{font-size:clamp(46px,7vw,104px)}
+.cta .ring{position:absolute;width:420px;height:420px;opacity:.10;right:-120px;top:-140px}
+footer{padding:20px 0 50px}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media (max-width:900px){
+  .navlinks{display:none}
+  .fcard{grid-template-columns:1fr;min-height:auto;position:relative;top:auto!important}
+  .mock{transform:none!important}
+  .calc,.band .in{grid-template-columns:1fr}
+  .row2 .side{padding:0 14px}
+  .blk .d,.row2 .side .d{font-size:clamp(40px,11vw,60px)}
 }
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){.blk,.reveal{animation:none;opacity:1;transform:none;transition:none}.belt{animation:none}}
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap nav">
-    <a class="lockup" href="/" aria-label="Potfolio home"><img src="/assets/mark.svg" alt=""><span class="word">p<span class="donut" data-donut></span>tfolio</span></a>
-    <nav class="navlinks" aria-label="Sections"><a href="#take">What will it take?</a><a href="#how">How it works</a><a href="#tour">Product</a><a href="#ideas">Ideas</a><a href="#faq">FAQ</a></nav>
-    <a class="btn btn-dark" style="height:44px;padding:0 18px;font-size:15px" href="/app/">Get started</a>
-  </div>
-</header>
 
-<main>
-<section class="hero">
-  <svg class="ring-bg hide-sm" viewBox="0 0 120 120" aria-hidden="true"><g transform="rotate(-90 60 60)" fill="none" stroke-width="20"><circle cx="60" cy="60" r="40" stroke="#E3EBFF" stroke-dasharray="95.5 251.3"/><circle cx="60" cy="60" r="40" stroke="#EAF0FF" stroke-dasharray="57.8 251.3" stroke-dashoffset="-100.5"/><circle cx="60" cy="60" r="40" stroke="#F7E6DC" stroke-dasharray="45.3 251.3" stroke-dashoffset="-163.3"/><circle cx="60" cy="60" r="40" stroke="#F0F4FF" stroke-dasharray="32.7 251.3" stroke-dashoffset="-213.6"/></g></svg>
-  <div class="wrap hero-grid" style="position:relative">
-    <div style="display:flex;flex-direction:column;gap:28px">
-      <span class="pill"><span class="stack"><span class="lg"><img src="/assets/logos/logo-apple.svg" alt=""></span><span class="lg"><img src="/assets/logos/logo-nvidia.svg" alt=""></span><span class="lg"><img src="/assets/logos/logo-google.svg" alt=""></span></span>AI wealth-building on Base</span>
-      <h1 class="display h1">Your ambition deserves an <span style="color:var(--blue)">investment strategy.</span></h1>
-      <p class="lead" style="max-width:520px">Don’t just save towards what you want to buy. Build towards the wealth you want to create. Name an ambition, see what it will take, and let the AI Guardian turn it into a strategy you can buy and sell on Base.</p>
-      <div class="btnrow">
-        <a class="btn btn-primary" href="/app/">Get started</a>
-        <a class="btn btn-dark" href="/download/potfolio.apk" data-apk><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></svg><span class="two"><small>Download for</small>Android</span></a>
-        <button class="btn btn-light" type="button" data-ios><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="two"><small>On iPhone?</small>Add to Home Screen</span></button>
+<header class="nav"><div class="in"><div class="bar">
+  <a class="lockup" href="/" aria-label="Potfolio home"><img src="/assets/mark.svg" alt=""><span class="word">p<span class="donut" data-donut></span>tfolio</span></a>
+  <nav class="navlinks" aria-label="Sections"><a href="#features">Features</a><a href="#take">What will it take?</a><a href="#safety">Safety</a><a href="#start">Get started</a><a href="#faq">FAQ</a></nav>
+  <a class="btn btn-navy" style="height:44px;padding:0 20px;font-size:15px" href="/app/">Try it out</a>
+</div></div></header>
+
+<section class="hero"><div class="wrap">
+  <div class="blocks">
+    <div class="blk"><span class="d">Your ambition</span></div>
+    <div class="blk"><span class="d">deserves an</span></div>
+    <div class="row2 blk" style="background:none;padding:0"><div class="blk" style="background:var(--sky);color:var(--navy);animation-delay:.25s;margin:0"><span class="d">investment</span></div><div class="side"><span class="d">↗</span></div></div>
+    <div class="blk"><span class="d">strategy.</span></div>
+  </div>
+  <div class="hero-foot">
+    <p class="lead">Don’t just save towards what you want to buy. Build towards the wealth you want to create, with an AI strategy you can buy and sell on Base.</p>
+    <div>
+      <div class="ctas">
+        <a class="btn btn-blue" href="/app/">Get started</a>
+        <a class="btn btn-navy" href="/download/potfolio.apk" data-apk><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></svg><span><small>Download for</small>Android</span></a>
+        <button class="btn btn-white" type="button" data-ios><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span><small>Coming to</small>iPhone</span></button>
       </div>
-      <div class="ios-note" data-ios-note style="color:var(--navy);background:#fff;box-shadow:inset 0 0 0 1px var(--line)">The iPhone app is coming to the App Store. Until then: open <b>potfolio</b> in Safari, tap <b>Share</b>, then <b>Add to Home Screen</b>. It works like an app.</div>
-      <p class="small">Educational, not financial advice. Tokenized stocks are available to eligible users outside the US.</p>
-    </div>
-    <div class="card widget reveal" aria-label="Try the Guardian">
-      <div class="wtop"><span class="eyebrow" style="font-size:12px">✦ Try the Guardian</span><span class="tag">Example · $500</span></div>
-      <div><p style="margin:0 0 10px;font-size:14px;font-weight:600">What is this pot for?</p><div class="chips" role="radiogroup" aria-label="Goal" id="goals"></div></div>
-      <div class="bar" id="bar"></div>
-      <div id="rows"></div>
-      <div class="guard"><span aria-hidden="true">🛡</span><span><b>Guardian check:</b> <span id="note"></span></span></div>
-      <a class="btn btn-primary" style="justify-content:center" href="/app/">Build my pot in the app</a>
+      <div class="ios-note" data-ios-note>The iPhone app is coming to the App Store. Until then: open <b>potfolio.xyz/app</b> in Safari, tap <b>Share</b>, then <b>Add to Home Screen</b>. It installs like an app.</div>
     </div>
   </div>
-</section>
-
-<section class="marquee" aria-label="Example companies">
-  <p class="wrap small" style="margin:0 auto 18px;font-size:13px;font-weight:600">Build pots from household names, a fraction at a time</p>
-  <div class="track" id="track"></div>
-  <p class="wrap small" style="margin:16px auto 0">Examples only. Availability depends on the tokenized stocks live on Base. Logos belong to their owners.</p>
-</section>
-
-<section class="partners-sec" aria-label="Partners" style="background:#fff;padding:40px 0 44px;border-bottom:1px solid var(--line)">
-  <div class="wrap" style="display:flex;flex-direction:column;align-items:center;gap:22px">
-    <p class="eyebrow" style="color:var(--slate)">Built with our partners</p>
-    <div class="partners">
-      <a href="https://base.org" target="_blank" rel="noopener" aria-label="Base"><img src="/assets/partners/base.svg" alt="Base" style="height:30px;width:auto"></a>
-      <a href="https://www.sendlight.xyz" target="_blank" rel="noopener" aria-label="Light by Sendlight"><img src="/assets/partners/light.svg" alt="Light" style="height:34px;width:auto"></a>
-    </div>
-    <p class="small" style="margin:0;text-align:center">Trades settle on Base. Checkout and payments by Light.</p>
+  <div class="ticker" aria-label="Tokenized stocks on Base">
+    <p>Trade tokenized stocks on Base</p>
+    <div class="track"><div class="belt" id="belt"></div><div class="belt" aria-hidden="true" id="belt2"></div></div>
   </div>
-</section>
+  <div class="scroll-cue"><a href="#features">SCROLL <span>↓</span></a></div>
+</div></section>
 
-<section id="take" class="sec" style="background:var(--cream)">
-  <div class="wrap">
-    <div class="reveal" style="max-width:720px;display:flex;flex-direction:column;gap:14px;margin-bottom:36px"><p class="eyebrow" style="color:var(--clay)">What will it take?</p><h2 class="display h2">Name the number. We’ll show the plan.</h2><p class="lead">Work backwards from your ambition to what you’d need to put in each month. Returns are assumptions, not forecasts.</p></div>
-    <div class="card reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;padding:28px">
-      <div style="display:flex;flex-direction:column;gap:18px">
-        <label style="font-weight:600;font-size:14px">I want to build
-          <div style="display:flex;align-items:center;gap:6px;margin-top:8px;border-bottom:2px solid var(--line);padding-bottom:6px"><span class="display" style="font-size:36px">$</span><input id="wT" inputmode="numeric" value="100000" style="border:0;outline:0;font-family:inherit;font-weight:800;font-size:40px;line-height:1.1;letter-spacing:-.03em;width:100%;background:transparent;color:var(--navy)"></div>
-        </label>
-        <div class="chips" id="wTc"></div>
-        <label style="font-weight:600;font-size:14px">In <span id="wYv">10</span> years<input id="wY" type="range" min="1" max="30" value="10" style="width:100%;margin-top:10px;accent-color:#0052FF"></label>
-        <label style="font-weight:600;font-size:14px">Starting with
-          <div style="display:flex;align-items:center;gap:6px;margin-top:8px;border-bottom:2px solid var(--line);padding-bottom:6px"><span style="font-size:22px;font-weight:700">$</span><input id="wS" inputmode="numeric" value="500" style="border:0;outline:0;font-family:inherit;font-weight:700;font-size:24px;line-height:1.2;width:100%;background:transparent;color:var(--navy)"></div>
-        </label>
-        <label style="display:flex;gap:10px;align-items:center;font-size:14px"><input id="wI" type="checkbox" checked style="width:18px;height:18px;accent-color:#0052FF"> In today’s money (3% inflation)</label>
+<section class="deck" id="features"><div class="wrap">
+  <div class="deck-head reveal"><p class="eyebrow" style="color:var(--clay)">How Potfolio works</p></div>
+
+  <article class="fcard">
+    <div><span class="num">01</span><h3 class="d">Name your ambition</h3><p>$100k in 10 years. $2,000 a month in passive income. Potfolio works backwards and shows exactly what it takes each month, adjusted for inflation.</p></div>
+    <div class="mock">
+      <div class="k">What will it take?</div>
+      <div class="d" style="font-size:52px;margin:10px 0 4px">$100,000</div>
+      <div style="color:var(--slate);font-weight:600">in 10 years · starting with $500 · today’s money</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px">
+        <div style="background:var(--mist);border-radius:16px;padding:12px"><b>Steady</b><div class="small">5% a year</div><div class="d" style="font-size:24px;margin-top:8px">$860</div></div>
+        <div style="background:var(--navy);color:#fff;border-radius:16px;padding:12px"><b>Balanced</b><div class="small" style="color:#A8B6D4">7% a year</div><div class="d" style="font-size:24px;margin-top:8px">$771</div></div>
+        <div style="background:var(--mist);border-radius:16px;padding:12px"><b>Growth</b><div class="small">9% a year</div><div class="d" style="font-size:24px;margin-top:8px">$688</div></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <p style="margin:0;font-weight:600;font-size:14px">What it takes each month</p>
-        <div id="wOut" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
-        <p class="small" id="wNote" style="margin:0;line-height:1.5"></p>
-        <a class="btn btn-primary" style="justify-content:center;margin-top:auto" href="/app/">Build my strategy</a>
-        <p class="small" style="margin:0">Illustrative maths, not a promised outcome or financial advice.</p>
-      </div>
+      <p class="small" style="margin:14px 0 0">Assumptions, not forecasts.</p>
     </div>
+  </article>
+
+  <article class="fcard">
+    <div><span class="num">02</span><h3 class="d">Get an AI strategy</h3><p>The AI Guardian builds a mix for your horizon and risk. It explains every pick, flags the biggest risk, and tells you when you drift off plan.</p></div>
+    <div class="mock">
+      <div class="k">Balanced mix · 10 years</div>
+      <div class="pbar" style="margin:14px 0 6px;display:flex;gap:3px;background:none"><i style="width:30%"></i><i style="width:25%;background:var(--mid)"></i><i style="width:25%;background:var(--sky)"></i><i style="width:20%;background:var(--clay)"></i></div>
+      <div class="al"><i class="sw" style="background:var(--blue)"></i><b>AAPLc</b><span>Steady cash machine</span><b>30%</b></div>
+      <div class="al"><i class="sw" style="background:var(--mid)"></i><b>NVDAc</b><span>AI chips leader</span><b>25%</b></div>
+      <div class="al"><i class="sw" style="background:var(--sky)"></i><b>KOc</b><span>Pays dividends</span><b>25%</b></div>
+      <div class="al"><i class="sw" style="background:var(--clay)"></i><b>Vc</b><span>Spreads the risk</span><b>20%</b></div>
+      <div style="margin-top:10px;background:#FFF4EE;border-radius:14px;padding:12px;font-size:13px;line-height:1.45"><b>Guardian:</b> 55% is tech-linked. A dip there hits this pot hardest.</div>
+    </div>
+  </article>
+
+  <article class="fcard">
+    <div><span class="num">03</span><h3 class="d">Buy &amp; sell on Base</h3><p>Invest with USDC from a wallet only you control. Every trade is a public Base transaction, and network fees are on us.</p></div>
+    <div class="mock">
+      <div class="k">Invested · $50 into “$100k in 10 years”</div>
+      <div class="receipt"><span class="ok">✓</span><div style="flex:1"><b>Bought AAPLc</b><div class="small">$15.00 · 0.0612 tokens</div></div><span class="small" style="color:var(--blue);font-weight:700">Basescan ↗</span></div>
+      <div class="receipt"><span class="ok">✓</span><div style="flex:1"><b>Bought NVDAc</b><div class="small">$12.50 · 0.0703 tokens</div></div><span class="small" style="color:var(--blue);font-weight:700">Basescan ↗</span></div>
+      <div class="receipt"><span class="ok">✓</span><div style="flex:1"><b>Bought KOc</b><div class="small">$12.50 · 0.1724 tokens</div></div><span class="small" style="color:var(--blue);font-weight:700">Basescan ↗</span></div>
+      <div style="display:flex;justify-content:space-between;margin-top:14px;font-size:14px"><span style="color:var(--slate)">Network fee</span><b style="color:var(--gain)">Paid by Potfolio</b></div>
+    </div>
+  </article>
+
+  <article class="fcard">
+    <div><span class="num">04</span><h3 class="d">Share your pots</h3><p>Send your goal and mix to friends as an image or a link. Amounts stay hidden unless you choose to show them.</p></div>
+    <div class="mock" style="background:var(--navy);color:#fff">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span class="word" style="font-size:22px">p<span class="donut" data-donut></span>tfolio</span><span class="small" style="color:#C9D6F2">Build wealth</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px"><div><div class="d" style="font-size:38px">Japa fund</div><div style="color:#C9D6F2;margin-top:6px">Goal for Jun 2028</div></div><img src="/assets/goals/goal_japa.svg" alt="" style="width:110px"></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:18px"><span class="d" style="font-size:48px">48%</span><span style="color:#C9D6F2;font-size:14px">of the way there<br>saving monthly</span></div>
+      <div class="pbar" style="background:#233457;margin-top:12px"><i style="width:48%;background:var(--mid)"></i></div>
+    </div>
+  </article>
+</div></section>
+
+<section id="take"><div class="wrap">
+  <div class="reveal" style="max-width:800px;margin-bottom:28px"><p class="eyebrow" style="color:var(--clay);margin-bottom:14px">What will it take?</p><h2 class="d" style="font-size:clamp(44px,6.4vw,92px)">Name the number. We’ll show the plan.</h2></div>
+  <div class="calc reveal">
+    <div class="panel" style="display:flex;flex-direction:column;gap:18px">
+      <label style="font-weight:700;font-size:14px">I want to build
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;border-bottom:3px solid var(--navy);padding-bottom:6px"><span class="d" style="font-size:44px">$</span><input id="wT" inputmode="numeric" value="100000" style="border:0;outline:0;font-family:'Inter Tight',sans-serif;font-weight:900;letter-spacing:-.04em;font-size:48px;line-height:1.1;width:100%;background:transparent;color:var(--navy)"></div>
+      </label>
+      <div class="chips" id="wTc"></div>
+      <label style="font-weight:700;font-size:14px">In <span id="wYv">10</span> years<input id="wY" type="range" min="1" max="30" value="10" style="width:100%;margin-top:10px;accent-color:#0052FF"></label>
+      <label style="font-weight:700;font-size:14px">Starting with
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;border-bottom:2px solid var(--line);padding-bottom:6px"><span style="font-size:22px;font-weight:800">$</span><input id="wS" inputmode="numeric" value="500" style="border:0;outline:0;font-family:inherit;font-weight:800;font-size:24px;line-height:1.2;width:100%;background:transparent;color:var(--navy)"></div>
+      </label>
+      <label style="display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600"><input id="wI" type="checkbox" checked style="width:18px;height:18px;accent-color:#0052FF"> In today’s money (3% inflation)</label>
+    </div>
+    <div class="panel dark" style="display:flex;flex-direction:column;gap:14px">
+      <p style="margin:0;font-weight:700;font-size:14px;color:#A8B6D4">What it takes each month</p>
+      <div id="wOut" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
+      <p id="wNote" style="margin:0;line-height:1.5;font-size:14px;color:#C9D6F2"></p>
+      <a class="btn btn-blue" style="margin-top:auto" href="/app/">Build my strategy</a>
+      <p class="small" style="margin:0;color:#8FA3C8">Illustrative maths, not a promised outcome or financial advice.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="band" id="safety"><div class="wrap"><div class="in reveal">
+  <div><p class="eyebrow" style="margin-bottom:14px">Safety</p><h2 class="d">Your keys. Your wallet. Your call.</h2></div>
+  <div class="pts">
+    <div class="pt"><span class="ic">🔑</span><div><b>Your key stays on your device</b><span>Potfolio creates a Base wallet on your phone or browser. We never see the key.</span></div></div>
+    <div class="pt"><span class="ic">✋</span><div><b>You approve every trade</b><span>The AI suggests, explains and warns. Nothing moves until you confirm.</span></div></div>
+    <div class="pt"><span class="ic">🧾</span><div><b>Public receipts</b><span>Every buy and sell is a Base transaction you can check on Basescan.</span></div></div>
+  </div>
+</div></div></section>
+
+<section class="steps" id="start">
+  <div class="wrap reveal" style="margin-bottom:26px"><p class="eyebrow" style="color:var(--blue);margin-bottom:14px">Get started</p><h2 class="d" style="font-size:clamp(40px,5.6vw,80px)">From zero to invested in minutes.</h2></div>
+  <div class="rail">
+    <div class="sp"><span class="n">01</span><div><h4>Create your account</h4><p>Sign up with Google or email. Your Base wallet is made on your device.</p></div></div>
+    <div class="sp"><span class="n">02</span><div><h4>Name an ambition</h4><p>Pick a number and a timeline. See what it takes each month.</p></div></div>
+    <div class="sp"><span class="n">03</span><div><h4>Add money</h4><p>Bank transfer or mobile money in NGN, KES, GHS and more, or send USDC on Base.</p></div></div>
+    <div class="sp"><span class="n">04</span><div><h4>Invest with the Guardian</h4><p>Review the explained mix, adjust it, and buy in one go.</p></div></div>
+    <div class="sp"><span class="n">05</span><div><h4>Track &amp; share</h4><p>Get nudged when a deposit is due, and share your progress with friends.</p></div></div>
   </div>
 </section>
 
-<section id="how" class="sec">
-  <div class="wrap">
-    <div class="reveal" style="max-width:720px;display:flex;flex-direction:column;gap:14px;margin-bottom:56px"><p class="eyebrow">How it works</p><h2 class="display h2">From an ambition to a strategy you own.</h2></div>
-    <div class="growbar hide-sm" aria-hidden="true"><span style="background:var(--blue)"></span><span style="background:var(--mid)"></span><span style="background:var(--sky)"></span></div>
-    <div class="grid3">
-      <div class="step reveal"><div style="display:flex;align-items:center;gap:14px"><b style="color:var(--slate)">01</b><span class="ic">🎯</span></div><h3 class="display" style="font-size:26px;margin:16px 0 8px">Name your ambition</h3><p class="lead" style="font-size:17px">$100k in 10 years, or $2,000 a month in income. See what it takes each month.</p></div>
-      <div class="step reveal"><div style="display:flex;align-items:center;gap:14px"><b style="color:var(--slate)">02</b><span class="ic">✦</span></div><h3 class="display" style="font-size:26px;margin:16px 0 8px">Get an explained strategy</h3><p class="lead" style="font-size:17px">The AI Guardian builds a mix for your horizon and risk, says why each pick belongs and flags the risks.</p></div>
-      <div class="step reveal"><div style="display:flex;align-items:center;gap:14px"><b style="color:var(--slate)">03</b><span class="ic">✓</span></div><h3 class="display" style="font-size:26px;margin:16px 0 8px">Buy and sell on Base</h3><p class="lead" style="font-size:17px">Invest with USDC from a wallet only you control. Every trade is a public Base transaction. Network fees are on us.</p></div>
-    </div>
+<section><div class="wrap">
+  <p class="eyebrow" style="text-align:center;color:var(--slate);margin-bottom:14px">Built with</p>
+  <div class="partners">
+    <a href="https://base.org" target="_blank" rel="noopener" aria-label="Base"><img src="/assets/partners/base.svg" alt="Base" style="height:32px;width:auto"></a>
+    <a href="https://www.sendlight.xyz" target="_blank" rel="noopener" aria-label="Light by Sendlight"><img src="/assets/partners/light.svg" alt="Light" style="height:36px;width:auto"></a>
   </div>
-</section>
+</div></section>
 
-<section id="tour" class="sec tour">
-  <div class="wrap">
-    <div class="reveal" style="max-width:720px;display:flex;flex-direction:column;gap:14px;margin-bottom:48px"><p class="eyebrow" style="color:var(--sky)">Inside the app</p><h2 class="display h2" style="color:#fff">Everything a first portfolio needs.</h2></div>
-    <div class="split">
-      <div style="display:flex;flex-direction:column;gap:28px">
-        <div class="tabs" role="tablist" aria-label="Product tour" id="tabs"></div>
-        <div style="min-height:120px"><h3 class="display" style="font-size:28px;color:#fff;margin:0 0 10px" id="tabTitle"></h3><p style="margin:0;font-size:18px;line-height:1.6;color:#A8B6D4" id="tabDesc"></p></div>
-      </div>
-      <div style="display:flex;justify-content:center;min-height:440px;align-items:center" id="panels"></div>
-    </div>
-  </div>
-</section>
+<section class="faq" id="faq"><div class="wrap" style="max-width:860px">
+  <div class="reveal" style="text-align:center;margin-bottom:30px"><p class="eyebrow" style="color:var(--clay);margin-bottom:14px">FAQ</p><h2 class="d" style="font-size:clamp(40px,5.6vw,76px)">Questions, answered plainly.</h2></div>
+  <details open><summary>Is Potfolio financial advice?</summary><p>No. The AI Guardian explains allocations and flags risks so you can learn. You make every decision and approve every action.</p></details>
+  <details><summary>Can I buy and sell for real?</summary><p>Yes. When you invest, Potfolio swaps USDC for tokenized stocks on Base through public exchanges, from your own wallet. You can sell back to USDC any time the market has liquidity. Each trade links to Basescan, and Potfolio covers the network fee.</p></details>
+  <details><summary>What do I actually own?</summary><p>Tokenized stocks issued on Base. Each is backed by a real share held by a regulated custodian and gives economic exposure, not voting rights.</p></details>
+  <details><summary>How do I add money?</summary><p>Pay by bank transfer or mobile money in your local currency through Light, or send USDC on Base straight to your wallet.</p></details>
+  <details><summary>Who can use Potfolio?</summary><p>Coinbase tokenized stocks are available only to eligible people outside the United States. Potfolio applies the same rule.</p></details>
+  <details><summary>Where is my wallet key?</summary><p>On your device. Potfolio creates a Base wallet on your phone or browser and never sends the key to our servers. Back it up from the Wallet tab.</p></details>
+  <details><summary>Is there an iPhone app?</summary><p>It’s coming to the App Store. Until then, open the web app in Safari and choose Share → Add to Home Screen. It installs like an app.</p></details>
+</div></section>
 
-<section id="ideas" class="sec" style="background:var(--mist)">
-  <div class="wrap">
-    <div class="reveal" style="max-width:720px;display:flex;flex-direction:column;gap:14px;margin-bottom:48px"><p class="eyebrow">Start from an idea</p><h2 class="display h2">Pots built from names you know.</h2><p class="lead">Pick a starting idea, then make it yours. Examples to learn from, not recommendations.</p></div>
-    <div class="grid3" id="pots"></div>
-  </div>
-</section>
+<section class="cta"><div class="wrap"><div class="in reveal">
+  <div class="ring" data-ring></div>
+  <p class="eyebrow" style="color:var(--sun);margin-bottom:18px">Private testing is open</p>
+  <h2 class="d">Start with your ambition.</h2>
+  <p class="lead" style="color:#C9D6F2;margin:20px auto 30px;max-width:560px">Name the number. Get the plan. Own the strategy.</p>
+  <div class="ctas" style="justify-content:center"><a class="btn btn-blue" href="/app/">Get started</a><a class="btn btn-white" style="box-shadow:none" href="/download/potfolio.apk" data-apk>Download for Android</a></div>
+</div></div></section>
 
-<section class="sec" style="background:var(--cream)">
-  <div class="wrap split">
-    <div class="reveal" style="display:flex;justify-content:center"><img src="/assets/mark.svg" alt="The Potfolio mark" style="width:260px;height:260px"></div>
-    <div class="reveal" style="display:flex;flex-direction:column;gap:20px">
-      <p class="eyebrow" style="color:var(--clay)">Why a pot</p>
-      <h2 class="display h2">Saving with a plan is an old idea. We made it digital.</h2>
-      <p class="lead">Before apps, many of us saved in a kolo: a clay box you filled with a goal in mind. Potfolio keeps that habit and adds what the kolo never had: a mix instead of a single bet, an explanation for every choice, and a record you own on Base.</p>
-    </div>
+<footer><div class="wrap">
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center;padding-bottom:22px;border-bottom:1px solid var(--line)">
+    <a class="lockup" href="/"><img src="/assets/mark.svg" alt=""><span class="word" style="font-size:24px">p<span class="donut" data-donut></span>tfolio</span></a>
+    <nav style="display:flex;flex-wrap:wrap;gap:24px;font-weight:600" aria-label="Footer"><a href="/app/" style="text-decoration:none">Web app</a><a href="#faq" style="text-decoration:none">FAQ</a><a href="https://x.com/search?q=%23Stocksmaxxing" style="text-decoration:none">#Stocksmaxxing</a></nav>
   </div>
-</section>
-
-<section id="faq" class="sec" style="background:var(--mist)">
-  <div class="wrap" style="max-width:860px">
-    <div class="reveal" style="text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center;margin-bottom:36px"><p class="eyebrow">FAQ</p><h2 class="display h2">Questions, answered plainly.</h2></div>
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <details open><summary>Is Potfolio financial advice?</summary><p>No. The AI Guardian explains allocations and flags risks so you can learn. You make every decision and approve every action.</p></details>
-      <details><summary>What do I actually own?</summary><p>Tokenized stocks issued on Base. Each is backed by a real share held by a regulated custodian and gives economic exposure, not voting rights.</p></details>
-      <details><summary>Who can use Potfolio?</summary><p>Coinbase tokenized stocks are available only to eligible people outside the United States. Potfolio applies the same rule.</p></details>
-      <details><summary>Is there an iPhone app?</summary><p>It’s coming to the App Store. Until then, open the web app in Safari and choose Share → Add to Home Screen. It installs like an app.</p></details>
-      <details><summary>Can I buy and sell for real?</summary><p>Yes. When you invest, Potfolio swaps USDC for tokenized stocks on Base through public exchanges, from your own wallet. You can sell back to USDC any time the market has liquidity. Each trade links to Basescan, and Potfolio covers the network fee.</p></details>
-      <details><summary>Where is my wallet key?</summary><p>On your device. Potfolio creates a Base wallet on your phone or browser and never sends the key to our servers. Back it up from the Wallet tab.</p></details>
-    </div>
-  </div>
-</section>
-
-<section id="get" class="get">
-  <div class="wrap" style="padding:112px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px">
-    <img src="/assets/mark-tile.svg" alt="" style="width:84px;height:84px;border-radius:20px">
-    <h2 class="display h2" style="color:#fff">Start with your ambition.</h2>
-    <p class="lead" style="color:#C9D6F2;max-width:560px">Use Potfolio in your browser, or install it on your phone.</p>
-    <div class="btnrow" style="justify-content:center">
-      <a class="btn" style="background:#fff;color:var(--navy)" href="/app/">Get started</a>
-      <a class="btn" style="background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)" href="/download/potfolio.apk" data-apk><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></svg><span class="two"><small>Download for</small>Android</span></a>
-      <button class="btn" type="button" style="background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)" data-ios><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span class="two"><small>On iPhone?</small>Add to Home Screen</span></button>
-    </div>
-    <div class="ios-note" data-ios-note>The iPhone app is coming to the App Store. Until then: open this site in Safari, tap <b>Share</b>, then <b>Add to Home Screen</b>.</div>
-    <p style="margin:0;font-size:13px;color:#8FA3C8;max-width:560px">Android: if your phone asks, allow installs from your browser. The APK is built from our GitHub repository on every release.</p>
-  </div>
-</section>
-</main>
-
-<footer>
-  <div class="wrap" style="padding:48px 24px;display:flex;flex-direction:column;gap:24px">
-    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center">
-      <a class="lockup" href="/"><img src="/assets/mark.svg" alt=""><span class="word" style="font-size:24px">p<span class="donut" data-donut></span>tfolio</span></a>
-      <nav style="display:flex;flex-wrap:wrap;gap:24px" aria-label="Footer"><a href="/app/" style="color:var(--slate);text-decoration:none">Web app</a><a href="#faq" style="color:var(--slate);text-decoration:none">FAQ</a><a href="https://x.com/search?q=%23Stocksmaxxing" style="color:var(--slate);text-decoration:none">#Stocksmaxxing</a></nav>
-    </div>
-    <p class="small" style="line-height:1.6;margin:0;padding-top:20px;border-top:1px solid var(--line)">© 2026 Potfolio. An educational tool, not financial advice or an offer to buy or sell securities. Company names and logos are trademarks of their owners, used only to identify those companies.</p>
-  </div>
-</footer>
+  <p class="small" style="line-height:1.6;margin:20px 0 0">© 2026 Potfolio. An educational tool, not financial advice or an offer to buy or sell securities. Tokenized stocks are for eligible users outside the US. Company names and logos are trademarks of their owners, used only to identify those companies.</p>
+</div></footer>
 
 <script>
 (function(){
-  var C=['#0052FF','#4D86FF','#99B9FF','#0A1A3A'];
-  var L=function(k){return '/assets/logos/logo-'+k+'.svg'};
-  var N={apple:['Apple','AAPL'],nvidia:['NVIDIA','NVDA'],google:['Alphabet','GOOGL'],meta:['Meta','META'],tesla:['Tesla','TSLA'],netflix:['Netflix','NFLX'],amd:['AMD','AMD'],coinbase:['Coinbase','COIN'],visa:['Visa','V'],spotify:['Spotify','SPOT'],nike:['Nike','NKE'],shopify:['Shopify','SHOP'],paypal:['PayPal','PYPL'],uber:['Uber','UBER'],cocacola:['Coca-Cola','KO'],airbnb:['Airbnb','ABNB'],intel:['Intel','INTC'],mastercard:['Mastercard','MA']};
-  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
-  // donut "o"
-  var donut='<svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true"><g transform="rotate(-90 60 60)" fill="none" stroke-width="20"><circle cx="60" cy="60" r="40" stroke="#0052FF" stroke-dasharray="95.5 251.3"/><circle cx="60" cy="60" r="40" stroke="#4D86FF" stroke-dasharray="57.8 251.3" stroke-dashoffset="-100.5"/><circle cx="60" cy="60" r="40" stroke="#D9653B" stroke-dasharray="45.3 251.3" stroke-dashoffset="-163.3"/><circle cx="60" cy="60" r="40" stroke="#99B9FF" stroke-dasharray="32.7 251.3" stroke-dashoffset="-213.6"/></g></svg>';
-  document.querySelectorAll('[data-donut]').forEach(function(el){el.innerHTML=donut});
-  // Guardian widget
-  var G=[{label:'Tech growth',note:'All four are US tech. A sector slump would move them together.',rows:[['apple',30],['nvidia',25],['google',25],['meta',20]]},
-         {label:'Everyday brands',note:'Consumer names. A spending slowdown would hit them together.',rows:[['nike',25],['cocacola',25],['visa',25],['netflix',25]]},
-         {label:'Future of money',note:'Payments and crypto. Coinbase usually swings more than the rest.',rows:[['coinbase',30],['paypal',25],['mastercard',25],['shopify',20]]}];
-  var goals=document.getElementById('goals'),bar=document.getElementById('bar'),rows=document.getElementById('rows'),note=document.getElementById('note');
-  function pick(i){
-    goals.querySelectorAll('.chip').forEach(function(b,j){b.setAttribute('aria-checked',j===i?'true':'false')});
-    var g=G[i];
-    bar.innerHTML=g.rows.map(function(r,j){return '<span style="flex:'+r[1]+';background:'+C[j]+'"></span>'}).join('');
-    rows.innerHTML=g.rows.map(function(r){return '<div class="row"><span class="lg"><img src="'+L(r[0])+'" alt="'+esc(N[r[0]][0])+' logo"></span><span class="nm"><b>'+esc(N[r[0]][0])+'</b><span class="tk">'+N[r[0]][1]+'</span></span><span class="pc">'+r[1]+'%</span><span class="usd">$'+(500*r[1]/100)+'</span></div>'}).join('');
-    note.textContent=g.note;
-  }
-  G.forEach(function(g,i){var b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('role','radio');b.textContent=g.label;b.onclick=function(){pick(i)};goals.appendChild(b)});
-  pick(0);
-  // marquee
-  var chips=Object.keys(N).map(function(k){return '<div class="lchip"><span class="lg"><img src="'+L(k)+'" alt="'+esc(N[k][0])+' logo"></span><b style="font-size:15px">'+esc(N[k][0])+'</b><span class="small" style="font-size:13px">'+N[k][1]+'</span></div>'}).join('');
-  document.getElementById('track').innerHTML=chips+chips;
-  // tour
-  var T=[['Discover','Browse real tokenized stocks','See the stocks available on Base, with plain-language notes on what each token represents.'],
-         ['Create a pot','Start from a goal','Name your pot, choose what it is for and set an amount. No ticker symbols needed.'],
-         ['AI Guardian','An explained mix, with the risk','The Guardian proposes 3 to 6 stocks, says why each belongs, and flags concentration before you commit.'],
-         ['Save on Base','Owned by your wallet','Approve once and your pot is recorded onchain. Anyone can verify the strategy; only you control it.'],
-         ['Track','Follow how it does','See your pot against the day you created it, and check it against the tokens in your wallet.']];
-  var row=function(k,r,s){return '<div class="row"><span class="lg"><img src="'+L(k)+'" alt=""></span><span class="nm"><b>'+N[k][0]+'</b>'+(s?'<span class="tk">'+s+'</span>':'')+'</span><span class="pc">'+r+'</span></div>'};
-  var P=[ '<p class="eyebrow" style="color:var(--slate)">Discover</p>'+['apple','nvidia','google','meta','tesla','netflix'].map(function(k){return row(k,N[k][1])}).join(''),
-    '<p class="eyebrow" style="color:var(--slate)">New pot</p><p class="display" style="font-size:22px;margin:10px 0 12px">What is this pot for?</p><div class="chips"><span class="chip">Build wealth</span><span class="chip" aria-checked="true">Tech growth</span><span class="chip">Dividend income</span><span class="chip">Long term</span></div><div style="margin-top:16px;background:var(--mist);border-radius:16px;padding:14px 16px"><span class="small">Amount</span><p class="display" style="font-size:32px">$500</p></div>',
-    '<p class="eyebrow">Guardian proposal</p><div class="bar" style="margin:12px 0"><span style="flex:30;background:#0052FF"></span><span style="flex:25;background:#4D86FF"></span><span style="flex:25;background:#99B9FF"></span><span style="flex:20;background:#0A1A3A"></span></div>'+row('apple','30%','Steady cash flow anchors the pot')+row('nvidia','25%','Higher growth, bigger swings')+row('google','25%','Search and cloud add balance')+row('meta','20%','Ads business with strong margins'),
-    '<p style="margin:0 0 10px;font-size:17px;font-weight:700">✓ Pot saved on Base</p><span class="small">Example record</span><div class="kv"><span>Pot</span><b>Tech Growth</b></div><div class="kv"><span>Owner</span><b>0x7a3…91c</b></div><div class="kv"><span>Weights</span><b>30 · 25 · 25 · 20</b></div><div class="kv"><span>Network</span><b>Base Sepolia</b></div><div class="kv"><span>Status</span><b style="color:var(--gain)">Confirmed</b></div>',
-    '<p class="eyebrow" style="color:var(--slate)">Tech Growth · example</p><p class="display" style="font-size:40px;margin-top:8px">$512.40</p><p style="margin:2px 0 8px;color:var(--gain);font-weight:600">+2.48% since created</p><svg viewBox="0 0 320 110" width="100%" height="110" preserveAspectRatio="none" aria-hidden="true"><path d="M0,110 L0,78 36,70 72,74 108,56 144,62 180,42 216,48 252,30 288,34 320,16 L320,110 Z" fill="#0052FF" fill-opacity=".08"/><polyline points="0,78 36,70 72,74 108,56 144,62 180,42 216,48 252,30 288,34 320,16" fill="none" stroke="#0052FF" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>'+row('apple','29% / 30')+row('nvidia','27% / 25')];
-  var tabs=document.getElementById('tabs'),panels=document.getElementById('panels');
-  panels.innerHTML=P.map(function(h,i){return '<div class="panel" role="tabpanel" id="p'+i+'"'+(i?' hidden':'')+'>'+h+'</div>'}).join('');
-  function tab(i){
-    tabs.querySelectorAll('.tab').forEach(function(b,j){b.setAttribute('aria-selected',j===i?'true':'false')});
-    panels.querySelectorAll('.panel').forEach(function(p,j){p.hidden=j!==i});
-    document.getElementById('tabTitle').textContent=T[i][1];document.getElementById('tabDesc').textContent=T[i][2];
-  }
-  T.forEach(function(t,i){var b=document.createElement('button');b.type='button';b.className='tab';b.setAttribute('role','tab');b.setAttribute('aria-controls','p'+i);b.innerHTML='<span class="n">0'+(i+1)+'</span>'+t[0];b.onclick=function(){tab(i)};tabs.appendChild(b)});
-  tab(0);
-  // example pots
-  var POTS=[['Tech Growth','Big US tech names that can grow over years.',[['apple',30],['nvidia',25],['google',25],['meta',20]]],
-            ['Everyday Brands','Companies you already use every week.',[['nike',25],['cocacola',25],['visa',25],['netflix',25]]],
-            ['Future of Money','Payments and crypto, from cards to exchanges.',[['coinbase',30],['paypal',25],['mastercard',25],['shopify',20]]]];
-  document.getElementById('pots').innerHTML=POTS.map(function(p){
-    return '<div class="card pot lift reveal"><div style="display:flex;justify-content:space-between;align-items:center"><span class="stack">'+p[2].map(function(r){return '<span class="lg" style="width:40px;height:40px;margin-left:-12px"><img src="'+L(r[0])+'" alt=""></span>'}).join('')+'</span><span class="tag" style="color:var(--blue);background:#EAF0FF">Example</span></div><div><h3 class="display" style="font-size:24px;margin:0 0 4px">'+p[0]+'</h3><p class="lead" style="font-size:15px">'+p[1]+'</p></div><div class="bar">'+p[2].map(function(r,j){return '<span style="flex:'+r[1]+';background:'+C[j]+'"></span>'}).join('')+'</div><div>'+p[2].map(function(r){return row(r[0],r[1]+'%')}).join('')+'</div></div>'}).join('');
-  // iPhone note
-  document.querySelectorAll('[data-ios]').forEach(function(b){b.onclick=function(){var n=b.closest('section').querySelector('[data-ios-note]');if(n)n.classList.toggle('show')}});
-  // hide APK button if the file is not published yet
-  var apkHref=(document.querySelector('[data-apk]')||{}).getAttribute&&document.querySelector('[data-apk]').getAttribute('href')||'';
-  if(apkHref.charAt(0)==='/')fetch(apkHref,{method:'HEAD'}).then(function(r){if(!r.ok){document.querySelectorAll('[data-apk]').forEach(function(a){a.removeAttribute('href');a.style.opacity='.55';a.style.pointerEvents='none';a.querySelector('.two').innerHTML='<small>Android APK</small>Coming soon'})}}).catch(function(){});
-})();
+  var DONUT='<svg viewBox="0 0 120 120" width="100%" height="100%"><g transform="rotate(-90 60 60)" fill="none" stroke-width="20"><circle cx="60" cy="60" r="40" stroke="#0052FF" stroke-dasharray="95.5 251.3"/><circle cx="60" cy="60" r="40" stroke="#4D86FF" stroke-dasharray="57.8 251.3" stroke-dashoffset="-100.5"/><circle cx="60" cy="60" r="40" stroke="#D9653B" stroke-dasharray="45.3 251.3" stroke-dashoffset="-163.3"/><circle cx="60" cy="60" r="40" stroke="#99B9FF" stroke-dasharray="32.7 251.3" stroke-dashoffset="-213.6"/></g></svg>';
+  document.querySelectorAll('[data-donut],[data-ring]').forEach(function(e){e.innerHTML=DONUT});
 
-(function(){
-  var T=document.getElementById('wT'),Y=document.getElementById('wY'),Yv=document.getElementById('wYv'),S=document.getElementById('wS'),I=document.getElementById('wI'),O=document.getElementById('wOut'),N=document.getElementById('wNote'),C=document.getElementById('wTc');
-  if(!T)return;
+  // ticker
+  var T=[['apple','AAPLc','+1.2%'],['nvidia','NVDAc','+2.4%'],['google','GOOGLc','+0.8%'],['tesla','TSLAc','+3.1%'],['meta','METAc','+1.6%'],['coinbase','COINc','+2.2%'],['netflix','NFLXc','+0.9%'],['visa','Vc','+0.4%'],['cocacola','KOc','+0.3%'],['amd','AMDc','+1.9%'],['shopify','SHOPc','+1.1%'],['uber','UBERc','+0.7%']];
+  var html=T.map(function(t){return '<div class="tk"><span class="l"><img src="/assets/logos/logo-'+t[0]+'.svg" alt=""></span><b>'+t[1]+'</b></div>'}).join('');
+  document.getElementById('belt').innerHTML=html; document.getElementById('belt2').innerHTML=html;
+
+  // iPhone note
+  var ib=document.querySelector('[data-ios]'),note=document.querySelector('[data-ios-note]');
+  if(ib&&note)ib.addEventListener('click',function(){note.classList.toggle('show')});
+
+  // reveal on scroll
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(function(e){io.observe(e)});
+
+  // stacked cards: shrink the ones underneath a little
+  var cards=[].slice.call(document.querySelectorAll('.fcard'));
+  function stack(){
+    if(innerWidth<=900){cards.forEach(function(c){c.style.transform=''});return}
+    cards.forEach(function(c,i){var n=cards[i+1];if(!n){c.style.transform='';return}
+      var r=n.getBoundingClientRect(),k=Math.min(1,Math.max(0,(innerHeight-r.top)/innerHeight));
+      c.style.transform='scale('+(1-0.05*k)+')';c.style.filter='brightness('+(1-0.15*k)+')'});
+  }
+  addEventListener('scroll',stack,{passive:true});addEventListener('resize',stack);stack();
+
+  // calculator
+  var wT=document.getElementById('wT'),wY=document.getElementById('wY'),wYv=document.getElementById('wYv'),wS=document.getElementById('wS'),wI=document.getElementById('wI'),O=document.getElementById('wOut'),N=document.getElementById('wNote'),C=document.getElementById('wTc');
   var SC=[['Steady',.05],['Balanced',.07],['Growth',.09]];
   var f=function(v){return '$'+Math.round(v).toLocaleString('en-US')};
-  [10000,100000,1000000].forEach(function(v){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=v>=1e6?'$1M':'$'+(v/1e3)+'k';b.onclick=function(){T.value=v;calc()};C.appendChild(b)});
+  [10000,100000,1000000].forEach(function(v){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=v>=1e6?'$1M':'$'+(v/1e3)+'k';b.onclick=function(){wT.value=v;calc()};C.appendChild(b)});
   function calc(){
-    var t=+String(T.value).replace(/[^0-9]/g,'')||0,y=+Y.value,s=+String(S.value).replace(/[^0-9]/g,'')||0;Yv.textContent=y;
-    var tn=I.checked?t*Math.pow(1.03,y):t;
+    var t=+String(wT.value).replace(/[^0-9]/g,'')||0,y=+wY.value,s=+String(wS.value).replace(/[^0-9]/g,'')||0;wYv.textContent=y;
+    var tn=wI.checked?t*Math.pow(1.03,y):t;
     O.innerHTML=SC.map(function(sc,i){var r=sc[1]/12,n=y*12,g=Math.pow(1+r,n),p=Math.max(0,(tn-s*g)*r/(g-1));
-      return '<div style="border-radius:18px;padding:14px;'+(i==1?'background:var(--navy);color:#fff':'background:var(--mist)')+'"><b style="font-size:14px">'+sc[0]+'</b><div style="font-size:12px;opacity:.7">'+Math.round(sc[1]*100)+'% a year</div><div class="display" style="font-size:24px;margin-top:10px">'+f(p)+'</div><div style="font-size:12px;opacity:.7">a month</div></div>'}).join('');
+      return '<div class="sc'+(i==1?' on':'')+'"><b style="font-size:14px">'+sc[0]+'</b><div style="font-size:12px;opacity:.7">'+Math.round(sc[1]*100)+'% a year</div><div class="d" style="font-size:28px;margin-top:10px">'+f(p)+'</div><div style="font-size:12px;opacity:.7">a month</div></div>'}).join('');
     var r=.07/12,g=Math.pow(1+r,y*12),p=Math.max(0,(tn-s*g)*r/(g-1));
-    N.textContent=I.checked?'You’d need about '+f(tn)+' in '+y+' years to match '+f(t)+' today. On the balanced path you’d put in '+f(s+p*y*12)+' yourself.':'On the balanced path you’d put in '+f(s+p*y*12)+' yourself; growth does the rest.';
+    N.textContent=wI.checked?'You’d need about '+f(tn)+' in '+y+' years to match '+f(t)+' today. On the balanced path you’d put in '+f(s+p*y*12)+' yourself.':'On the balanced path you’d put in '+f(s+p*y*12)+' yourself; growth does the rest.';
   }
-  [T,Y,S,I].forEach(function(e){e.addEventListener('input',calc)});calc();
+  [wT,wY,wS,wI].forEach(function(e){e.addEventListener('input',calc)});calc();
 })();
 </script>
 </body>
